@@ -9,6 +9,9 @@
   <meta property="og:title" content="Alchemy Karate Academy · Turning the ordinary into extraordinary" />
   <meta property="og:description" content="Three dojos in El Paso. Karate, kickboxing, after-school care and a competition team on the world stage." />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="preload" as="image" href="/logo.webp" />
+  <meta property="og:image" content="/logo.webp" />
 </head>
 <body class="is-intro">
 
@@ -16,6 +19,7 @@
        INTRO: HOLD TO BREAK THE BOARD
        ========================================================= -->
   <div id="intro" class="intro" role="dialog" aria-label="Intro">
+    <div class="intro__bg" aria-hidden="true"></div>
     <div class="intro__grid" aria-hidden="true"></div>
     <div class="intro__stage" id="introStage">
       <p class="intro__kicker mono" data-i18n="intro.kicker">Alchemy Karate Academy · El Paso, TX</p>
@@ -41,6 +45,12 @@
     </div>
 
     <div class="intro__kiai" aria-hidden="true">気合</div>
+    <div class="intro__logo" id="introLogo" aria-hidden="true">
+      <span class="intro__shock"></span>
+      <span class="intro__shock intro__shock--2"></span>
+      <img src="/logo.webp" alt="" width="923" height="845" />
+      <span class="shine"></span>
+    </div>
     <canvas class="intro__splinters" id="splinters" aria-hidden="true"></canvas>
     <div class="intro__flash" aria-hidden="true"></div>
 
@@ -58,10 +68,8 @@
        ========================================================= -->
   <header class="nav" id="nav">
     <a href="#top" class="brand" aria-label="Alchemy Karate Academy home">
-      <span class="brand__mark">
-        <svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18"/><path d="M20 4 L35 30 L5 30 Z"/><circle cx="20" cy="22" r="6"/></svg>
-      </span>
-      <span class="brand__text"><b>ALCHEMY</b><small>KARATE ACADEMY</small></span>
+      <img class="brand__logo" id="brandLogo" src="/logo-sm.webp" alt="Alchemy Karate Academy" width="240" height="220" />
+      <span class="shine shine--sm"></span>
     </a>
     <nav class="nav__links" aria-label="Main">
       <a href="#path" data-i18n="nav.path">The Path</a>
@@ -433,7 +441,10 @@
   </main>
 
   <footer class="footer">
-    <div class="footer__word" aria-hidden="true">ALCHEMY</div>
+    <div class="footer__brand">
+      <div class="footer__word" aria-hidden="true">ALCHEMY</div>
+      <img class="footer__logo" src="/logo.webp" alt="Alchemy Karate Academy" loading="lazy" width="923" height="845" />
+    </div>
     <div class="footer__row">
       <p data-i18n="foot.tag">Turning the ordinary into extraordinary.</p>
       <div class="footer__links">

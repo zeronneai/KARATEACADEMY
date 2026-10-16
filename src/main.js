@@ -87,6 +87,31 @@ const sound = {
     const h = this.hum; this.hum = null;
     setTimeout(() => { h.osc.stop(); h.osc2.stop(); }, 300);
   },
+  impact() {
+    if (!this.on) return;
+    const ctx = this.get(); if (!ctx) return;
+    const now = ctx.currentTime;
+    const o = ctx.createOscillator(); const g = ctx.createGain();
+    o.type = 'sine';
+    o.frequency.setValueAtTime(90, now); o.frequency.exponentialRampToValueAtTime(28, now + 0.5);
+    g.gain.setValueAtTime(1.2, now); g.gain.exponentialRampToValueAtTime(0.001, now + 0.9);
+    o.connect(g); g.connect(ctx.destination); o.start(now); o.stop(now + 0.95);
+    const len = ctx.sampleRate * 0.25;
+    const buf = ctx.createBuffer(1, len, ctx.sampleRate);
+    const d = buf.getChannelData(0);
+    for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 6);
+    const n = ctx.createBufferSource(); n.buffer = buf;
+    const lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 700;
+    n.connect(lp); lp.connect(ctx.destination); n.start(now);
+    // shimmer for the shine
+    [880, 1320, 1760].forEach((f, i) => {
+      const s = ctx.createOscillator(); const sg = ctx.createGain();
+      s.type = 'triangle'; s.frequency.value = f;
+      const t0 = now + 0.55 + i * 0.07;
+      sg.gain.setValueAtTime(0.0001, t0); sg.gain.exponentialRampToValueAtTime(0.05, t0 + 0.02); sg.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.9);
+      s.connect(sg); sg.connect(ctx.destination); s.start(t0); s.stop(t0 + 1);
+    });
+  },
   crack() {
     if (!this.on) return;
     const ctx = this.get(); if (!ctx) return;
@@ -206,7 +231,7 @@ function runIntro() {
     if (navigator.vibrate) navigator.vibrate([30, 40, 80]);
     splinters(board);
 
-    const tl = gsap.timeline({ onComplete: finish });
+    const tl = gsap.timeline();
     tl.set(board, { x: 0, y: 0, rotation: 0 })
       .to('.intro__flash', { opacity: 0.9, duration: 0.05 })
       .to('.intro__flash', { opacity: 0, duration: 0.5, ease: 'power2.out' })
@@ -216,9 +241,39 @@ function runIntro() {
       .to('#introStage', { keyframes: [{ x: -14, y: 8 }, { x: 12, y: -6 }, { x: -6, y: 4 }, { x: 0, y: 0 }], duration: 0.35 }, '<')
       .to(['.hold', '.intro__hint', '.intro__kicker'], { opacity: 0, y: 20, duration: 0.4 }, '<')
       .fromTo('.intro__kiai', { opacity: 0, scale: 0.55 }, { opacity: 1, scale: 1, duration: 0.45, ease: 'back.out(2)' }, '<0.05')
-      .to('.intro__kiai', { opacity: 0, scale: 1.4, filter: 'blur(12px)', duration: 0.6, ease: 'power2.in' }, '+=0.25')
-      .to(intro, { clipPath: 'inset(0 0 100% 0)', duration: 0.9, ease: 'expo.inOut' }, '-=0.3')
-      .add(() => heroIn(), '-=0.55');
+      .to('.intro__kiai', { opacity: 0, scale: 1.4, filter: 'blur(12px)', duration: 0.45, ease: 'power2.in' }, '+=0.15')
+      .add(logoSequence(), '-=0.2');
+  }
+
+  // Logo slams in, shockwave, shine, then flies into the nav
+  function logoSequence() {
+    const logo = $('#introLogo');
+    const tl = gsap.timeline();
+    tl.fromTo(logo, { opacity: 0, scale: 2.8, filter: 'blur(24px)', rotation: -6 },
+      { opacity: 1, scale: 1, filter: 'blur(0px)', rotation: 0, duration: 0.42, ease: 'power4.in' })
+      .add(() => { sound.impact(); if (navigator.vibrate) navigator.vibrate(60); })
+      .to('.intro__flash', { opacity: 0.35, duration: 0.04 })
+      .to('.intro__flash', { opacity: 0, duration: 0.45 })
+      .fromTo('.intro__shock', { scale: 0.3, opacity: 1 }, { scale: 2.6, opacity: 0, duration: 0.9, stagger: 0.12, ease: 'expo.out' }, '<')
+      .to('#introStage', { keyframes: [{ x: -10, y: 6 }, { x: 8, y: -5 }, { x: -3, y: 2 }, { x: 0, y: 0 }], duration: 0.3 }, '<')
+      .fromTo(logo, { scale: 0.94 }, { scale: 1, duration: 0.6, ease: 'elastic.out(1, 0.4)' }, '<')
+      .fromTo('#introLogo .shine', { backgroundPosition: '160% 0' }, { backgroundPosition: '-60% 0', duration: 0.9, ease: 'power2.inOut' }, '<0.15')
+      .add(() => flyToNav(logo), '+=0.25');
+    return tl;
+  }
+
+  function flyToNav(logo) {
+    const target = $('#brandLogo').getBoundingClientRect();
+    const from = logo.getBoundingClientRect();
+    const scale = target.height / from.height;
+    const dx = target.left + target.width / 2 - (from.left + from.width / 2);
+    const dy = target.top + target.height / 2 - (from.top + from.height / 2);
+    intro.style.pointerEvents = 'none';
+    heroIn({ skipBrand: true });
+    gsap.timeline({ onComplete: finish })
+      .to(['.intro__bg', '.intro__grid', '.intro__corner', '.intro__splinters'], { opacity: 0, duration: 0.8, ease: 'power2.inOut' }, 0)
+      .to(logo, { x: dx, y: dy, scale, duration: 1.05, ease: 'expo.inOut' }, 0)
+      .to('#introLogo img', { filter: 'drop-shadow(0 4px 14px rgba(0,0,0,.5))', duration: 1 }, 0);
   }
 
   function finish() {
@@ -234,6 +289,7 @@ function runIntro() {
     cleanup();
     gsap.to(intro, { opacity: 0, duration: 0.5, onComplete: finish });
     heroIn();
+    gsap.fromTo('.brand', { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.8, ease: 'back.out(2)', delay: 0.2 });
   });
 }
 
@@ -306,7 +362,7 @@ window.addEventListener('resize', () => { fitHero(); });
    --------------------------------------------------------- */
 let heroPlayed = false;
 function scramble(el, finalText, duration = 1.1) {
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ空手道錬金気合';
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   const obj = { p: 0 };
   return gsap.to(obj, {
     p: 1, duration, ease: 'power2.out',
@@ -321,12 +377,12 @@ function scramble(el, finalText, duration = 1.1) {
 }
 
 const em = () => parseFloat(getComputedStyle($('.hero__title')).fontSize);
-function heroIn() {
+function heroIn(opts = {}) {
   if (heroPlayed) return; heroPlayed = true;
   const extra = $('#extra');
   const finalExtra = t('hero.extra');
   const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
-  tl.from('.nav', { y: -40, opacity: 0, duration: 1 })
+  tl.from(opts.skipBrand ? '.nav__links, .nav__right' : '.nav', { y: -40, opacity: 0, duration: 1 })
     .from('.hero__title .row__in', { yPercent: 115, duration: 1.2, stagger: 0.09 }, 0)
     .add(() => { extra.style.visibility = 'hidden'; }, 0)
     .to('.chop__slash', { scaleX: 1, duration: 0.22, ease: 'power4.in' }, 0.75)
@@ -505,6 +561,12 @@ $$('.count').forEach((el) => {
       onUpdate: () => { el.textContent = Math.round(o.v).toLocaleString('en-US'); },
     }),
   });
+});
+
+/* footer logo */
+gsap.from('.footer__logo', {
+  scale: 0.6, opacity: 0, rotation: -8, ease: 'back.out(1.6)', duration: 1.2,
+  scrollTrigger: { trigger: '.footer', start: 'top 80%' },
 });
 
 /* footer word fill */
