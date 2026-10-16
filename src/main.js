@@ -358,6 +358,41 @@ fitHero();
 window.addEventListener('resize', () => { fitHero(); });
 
 /* ---------------------------------------------------------
+   MEDIA SLOTS: quitar los que no tengan archivo
+   --------------------------------------------------------- */
+function initMedia() {
+  const hero = $('.hero__media');
+  const vid = hero.querySelector('video');
+  const src = vid.querySelector('source');
+  vid.addEventListener('loadeddata', () => hero.classList.add('is-ready'));
+  src.addEventListener('error', () => {
+    // sin video: intentar solo el poster como imagen
+    const img = new Image();
+    img.onload = () => { vid.remove(); hero.style.background = 'url(/media/hero.jpg) center / cover'; hero.classList.add('is-ready'); hero.style.opacity = '.38'; };
+    img.onerror = () => hero.remove();
+    img.src = '/media/hero.jpg';
+  });
+
+  $$('img.slot').forEach((img) => {
+    const ok = () => {
+      img.closest('.card')?.classList.add('has-img');
+      const g = img.closest('#gallery');
+      if (g && g.hidden) { g.hidden = false; ScrollTrigger.refresh(); }
+    };
+    const bad = () => { img.remove(); };
+    if (img.complete) { img.naturalWidth ? ok() : bad(); }
+    img.addEventListener('load', ok);
+    img.addEventListener('error', bad);
+  });
+}
+initMedia();
+gsap.to('#galleryTrack', {
+  x: () => -Math.max(0, $('#galleryTrack').scrollWidth - innerWidth),
+  ease: 'none',
+  scrollTrigger: { trigger: '#gallery', start: 'top bottom', end: 'bottom top', scrub: true, invalidateOnRefresh: true },
+});
+
+/* ---------------------------------------------------------
    HERO: THE CHOP
    --------------------------------------------------------- */
 let heroPlayed = false;

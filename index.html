@@ -105,6 +105,12 @@
         <circle cx="300" cy="50" r="14" /><circle cx="516.5" cy="425" r="14" /><circle cx="83.5" cy="425" r="14" />
         <circle cx="300" cy="550" r="10" /><circle cx="83.5" cy="175" r="10" /><circle cx="516.5" cy="175" r="10" />
       </svg>
+      <!-- IMAGEN / VIDEO HERO: public/media/hero.mp4 (+ poster public/media/hero.jpg) -->
+      <div class="hero__media media-slot" aria-hidden="true">
+        <video class="slot" muted loop playsinline autoplay preload="metadata" poster="/media/hero.jpg">
+          <source src="/media/hero.mp4" type="video/mp4" />
+        </video>
+      </div>
       <div class="hero__glow" aria-hidden="true"></div>
       <div class="hero__kanji" aria-hidden="true">空手道</div>
 
@@ -256,6 +262,7 @@
       <div class="bento">
         <article class="card card--xl tilt reveal">
           <div class="card__bg" style="--k:'空手'"></div>
+          <img class="card__img slot" src="/media/programs/kids-karate.jpg" alt="" loading="lazy" />
           <p class="card__tag mono" data-i18n="p1.tag">Kids &amp; teens</p>
           <h3 data-i18n="p1.t">Kids Karate</h3>
           <p data-i18n="p1.d">Confidence through small victories. Structured classes that build focus, respect, coordination and the courage to try.</p>
@@ -263,6 +270,7 @@
         </article>
         <article class="card card--tall tilt reveal">
           <div class="card__bg" style="--k:'放課後'"></div>
+          <img class="card__img slot" src="/media/programs/after-school.jpg" alt="" loading="lazy" />
           <p class="card__tag mono" data-i18n="p2.tag">School days</p>
           <h3 data-i18n="p2.t">After-School Care</h3>
           <p data-i18n="p2.d">Making after-school the best part of their day.</p>
@@ -276,24 +284,28 @@
         </article>
         <article class="card tilt reveal">
           <div class="card__bg" style="--k:'拳'"></div>
+          <img class="card__img slot" src="/media/programs/kickboxing.jpg" alt="" loading="lazy" />
           <p class="card__tag mono" data-i18n="p3.tag">Adults</p>
           <h3 data-i18n="p3.t">Fitness Kickboxing</h3>
           <p data-i18n="p3.d">Burn calories, build strength and train like a fighter.</p>
         </article>
         <article class="card card--red tilt reveal">
           <div class="card__bg" style="--k:'勝'"></div>
+          <img class="card__img slot" src="/media/programs/competition.jpg" alt="" loading="lazy" />
           <p class="card__tag mono" data-i18n="p4.tag">Team Alchemy</p>
           <h3 data-i18n="p4.t">Competition Team</h3>
           <p data-i18n="p4.d">From local tournaments to the WAKO World Championships with Team USA.</p>
         </article>
         <article class="card card--gold tilt reveal">
           <div class="card__bg" style="--k:'導'"></div>
+          <img class="card__img slot" src="/media/programs/leadership.jpg" alt="" loading="lazy" />
           <p class="card__tag mono" data-i18n="p5.tag">Mentorship</p>
           <h3 data-i18n="p5.t">Leadership Program</h3>
           <p data-i18n="p5.d">Seminars and mentorship that turn students into leaders on and off the mat.</p>
         </article>
-        <article class="card card--wide tilt reveal">
+        <article class="card tilt reveal">
           <div class="card__bg" style="--k:'祭'"></div>
+          <img class="card__img slot" src="/media/programs/camps.jpg" alt="" loading="lazy" />
           <p class="card__tag mono" data-i18n="p6.tag">All year</p>
           <h3 data-i18n="p6.t">Camps &amp; Birthday Parties</h3>
           <p data-i18n="p6.d">Spring break, summer, sparring and gymnastics camps. Birthday parties with a kiai.</p>
@@ -317,16 +329,19 @@
 
       <div class="arena__facts">
         <article class="fact reveal">
+          <img class="fact__img slot" src="/media/arena/wako-worlds.jpg" alt="" loading="lazy" />
           <p class="mono fact__k" data-i18n="f1.k">Jesolo, Italy · 2026</p>
           <h3 data-i18n="f1.t">WAKO Youth World Championships</h3>
           <p data-i18n="f1.d">Team Alchemy competing with Team USA on the world stage.</p>
         </article>
         <article class="fact reveal">
+          <img class="fact__img slot" src="/media/arena/battle-of-the-champions.jpg" alt="" loading="lazy" />
           <p class="mono fact__k" data-i18n="f2.k">El Paso County Coliseum</p>
           <h3 data-i18n="f2.t">Battle of the Champions</h3>
           <p data-i18n="f2.d">Our own tournament. The whole city watching.</p>
         </article>
         <article class="fact reveal">
+          <img class="fact__img slot" src="/media/arena/panamerican.jpg" alt="" loading="lazy" />
           <p class="mono fact__k" data-i18n="f3.k">Panamerican Championships</p>
           <h3 data-i18n="f3.t">Champions bring gold home</h3>
           <p data-i18n="f3.d">Alchemy athletes on the podium, representing El Paso.</p>
@@ -343,6 +358,28 @@
     <!-- =========================================================
          TESTIMONIALS
          ========================================================= -->
+    <!-- GALERIA: public/media/gallery/01.jpg ... 10.jpg (se oculta sola si no hay fotos) -->
+    <section class="gallery" id="gallery" aria-label="Life at the dojo" hidden>
+      <div class="section-head">
+        <p class="eyebrow mono" data-i18n="g.eyebrow">Life at the dojo</p>
+        <h2 class="h2" data-i18n="g.title">Every class is a story.</h2>
+      </div>
+      <div class="gallery__rail">
+        <div class="gallery__track" id="galleryTrack">
+          <img class="slot" src="/media/gallery/01.jpg" alt="Alchemy Karate Academy" />
+          <img class="slot" src="/media/gallery/02.jpg" alt="Alchemy Karate Academy" />
+          <img class="slot" src="/media/gallery/03.jpg" alt="Alchemy Karate Academy" />
+          <img class="slot" src="/media/gallery/04.jpg" alt="Alchemy Karate Academy" />
+          <img class="slot" src="/media/gallery/05.jpg" alt="Alchemy Karate Academy" />
+          <img class="slot" src="/media/gallery/06.jpg" alt="Alchemy Karate Academy" />
+          <img class="slot" src="/media/gallery/07.jpg" alt="Alchemy Karate Academy" />
+          <img class="slot" src="/media/gallery/08.jpg" alt="Alchemy Karate Academy" />
+          <img class="slot" src="/media/gallery/09.jpg" alt="Alchemy Karate Academy" />
+          <img class="slot" src="/media/gallery/10.jpg" alt="Alchemy Karate Academy" />
+        </div>
+      </div>
+    </section>
+
     <section class="voices" id="voices">
       <div class="section-head">
         <p class="eyebrow mono" data-i18n="t.eyebrow">Parents</p>

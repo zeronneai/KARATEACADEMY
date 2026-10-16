@@ -582,3 +582,30 @@ body.is-intro .brand { opacity: 0; }
 .footer__brand { position: relative; display: grid; place-items: center; }
 .footer__brand > * { grid-area: 1 / 1; }
 .footer__logo { width: clamp(150px, 22vw, 300px); height: auto; position: relative; filter: drop-shadow(0 20px 40px rgba(0,0,0,.6)); }
+
+/* =========================================================
+   MEDIA SLOTS (fotos/video del cliente en public/media/)
+   Si el archivo no existe, el slot se quita solo y el diseno queda igual.
+   ========================================================= */
+.slot { display: block; }
+.hero__media { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+.hero__media video { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1.2s; filter: grayscale(.35) contrast(1.1); }
+.hero__media.is-ready video { opacity: .38; }
+.hero__media::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, var(--ink) 15%, rgba(10,10,11,.55) 60%, rgba(10,10,11,.85)), linear-gradient(0deg, var(--ink), transparent 40%); }
+.hero .sigil, .hero .hero__glow, .hero .hero__kanji, .hero .hero__inner { z-index: 1; }
+
+.card__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -3; opacity: 0; transition: opacity .8s, transform 1.2s var(--ease); }
+.card.has-img .card__img { opacity: .55; }
+.card.has-img:hover .card__img { transform: scale(1.06); opacity: .7; }
+.card.has-img::after { content: ""; position: absolute; inset: 0; z-index: -2; background: linear-gradient(0deg, rgba(10,10,11,.95) 10%, rgba(10,10,11,.35) 70%, rgba(10,10,11,.15)); }
+.card--red.has-img::after { background: linear-gradient(0deg, rgba(160,8,14,.96) 15%, rgba(227,18,27,.45) 75%); }
+.card.has-img .card__bg { opacity: .5; }
+
+.fact__img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 16px; margin-bottom: 20px; filter: grayscale(.2); }
+
+.gallery { padding: clamp(80px, 12vw, 160px) 0; overflow: hidden; }
+.gallery[hidden] { display: none; }
+.gallery__track { display: flex; gap: 14px; width: max-content; padding: 0 var(--gutter); will-change: transform; }
+.gallery__track img { height: clamp(260px, 38vw, 480px); width: auto; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 20px; flex: none; }
+.gallery__track img:nth-child(3n+2) { aspect-ratio: 3 / 4; margin-top: 50px; }
+.gallery__track img:nth-child(4n) { aspect-ratio: 16 / 10; }

@@ -69,6 +69,7 @@ const es = {
   'f3.k': 'Campeonato Panamericano', 'f3.t': 'Campeones que traen el oro', 'f3.d': 'Atletas de Alchemy en el podio, representando a El Paso.',
   's1': 'dojos en El Paso', 's2': 'cintas entre el primer día y la negra', 's3': 'familias y fans siguiendo el camino',
 
+  'g.eyebrow': 'La vida en el dojo', 'g.title': 'Cada clase es una historia.',
   't.eyebrow': 'Papás', 't.title': 'Ellos vieron el cambio.', 't.parent': 'Mamá / papá Alchemy',
   't1.q': 'Mi pequeño espera cada clase con emoción. Los instructores son pacientes y apasionados, y cada semana vemos más autodisciplina y concentración.',
   't2.q': 'A cinco meses, mi hijo muestra más confianza y enfoque en la escuela. Fue nuestra primera actividad extraescolar y estamos muy contentos.',

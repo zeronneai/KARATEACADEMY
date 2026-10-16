@@ -30,6 +30,15 @@ npm run build    # produce /dist
 
 Deploy en Vercel: importar el repo, framework "Vite", sin configuración extra. `/#nointro` salta la intro para revisar rápido.
 
+## Dónde van las imágenes
+
+Todo va en `public/media/` con nombres fijos. La tabla completa con tamaños está en [`public/media/LEEME.md`](public/media/LEEME.md). Si un archivo no existe, su espacio se oculta solo y el diseño se ve igual.
+
+- `media/hero.mp4` + `media/hero.jpg`: fondo del hero (video en loop o foto).
+- `media/programs/`: `kids-karate`, `after-school`, `kickboxing`, `competition`, `leadership`, `camps` (.jpg).
+- `media/arena/`: `wako-worlds`, `battle-of-the-champions`, `panamerican` (.jpg).
+- `media/gallery/01.jpg` a `10.jpg`: carrusel "Life at the dojo" (aparece solo cuando hay fotos).
+
 ## Pendientes antes de mostrar al cliente
 
 - [x] Logo real integrado (nav, intro animada y footer).
