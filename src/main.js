@@ -376,7 +376,7 @@ function heroIn(opts = {}) {
     .to('.chop', { color: '#3a3836', duration: 0.6 }, 0.97)
     .to('.chop__slash', { opacity: 0, duration: 0.6, ease: 'power2.out' }, 1.05)
     .add(() => { extra.style.visibility = 'visible'; scramble(extra, finalExtra, 1.2); }, 1.05)
-    .from('.hero__eyebrow, .hero__sub, .hero__ctas, .hero__meta li', { y: 26, opacity: 0, duration: 1, stagger: 0.06 }, 1.1)
+    .from('.hero__ctas, .hero__meta li', { y: 26, opacity: 0, duration: 1, stagger: 0.06 }, 1.1)
     .from('#sigil', { opacity: 0, scale: 0.85, rotation: -40, duration: 2.2, ease: 'power3.out' }, 0.2)
     .from('.hero__kanji', { opacity: 0, y: 40, duration: 1.6 }, 0.6);
 
