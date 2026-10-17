@@ -53,11 +53,11 @@ En local: copia `.env.example` a `.env` y pega la URL.
 | published | Casilla. Si está apagada, el evento no se muestra. |
 | date | Fecha (AAAA-MM-DD). Si es futura sale como "Upcoming" con cuenta regresiva; si ya pasó, sale como resultado. |
 | date_label_en / date_label_es | Opcional. Texto en lugar de la fecha, por ejemplo "June 8, 10 & 12". |
-| category | tournament, achievement, training, seminar, camp o graduation. |
+| category | tournament, achievement, training, seminar, camp, graduation o motivation. Las filas `motivation` no salen como evento: van al "Muro del dojo" (posters motivacionales). |
 | title_en / title_es | Título en inglés y español. |
 | location | Lugar. |
 | desc_en / desc_es | Descripción corta. |
-| image | Opcional. Ruta como `/media/events/foto.jpg` o una URL completa de imagen. |
+| image | Opcional. Ruta como `/media/events/foto.jpg` o una URL completa de imagen. Los flyers se muestran completos (sin recortar) y se pueden ampliar con un clic. |
 | link | Opcional. Link de registro, Facebook del evento, etc. |
 | featured | Casilla. Los destacados tienen prioridad en el home cuando no hay próximos eventos. |
 

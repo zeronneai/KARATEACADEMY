@@ -1,15 +1,16 @@
 // Fallback events. When the Google Sheet is connected (VITE_SHEETS_ENDPOINT),
 // the "Events" tab replaces this list, so the academy edits events from the Sheet.
-// category: tournament | achievement | training | seminar | camp | graduation
+// category: tournament | achievement | training | seminar | camp | graduation | motivation
+// motivation rows do not show as events: they go to "The Dojo Wall" on /events/
 // date: YYYY-MM-DD (used for sorting and "upcoming" vs "past")
 // dateLabel: optional text shown instead of the exact date
 
 export const fallbackEvents = [
   {
-    date: '2026-09-01', dateLabel: { en: 'September 2026', es: 'Septiembre 2026' },
+    date: '2026-09-05',
     category: 'tournament', featured: true,
     title: { en: 'Battle of the Champions 2026', es: 'Battle of the Champions 2026' },
-    location: 'El Paso County Coliseum',
+    location: 'El Paso Coliseum',
     desc: { en: 'Our own tournament, hosted by Alchemy Karate Academy with competitors from across the region.', es: 'Nuestro propio torneo, organizado por Alchemy Karate Academy con competidores de toda la región.' },
     image: '/media/events/battle-of-the-champions-2026.jpg',
   },
@@ -68,5 +69,24 @@ export const fallbackEvents = [
     location: 'WAKO Junior World Kickboxing Championships',
     desc: { en: 'Alchemy athletes were part of the Team USA squad that set records in 2024.', es: 'Atletas de Alchemy formaron parte del equipo de Team USA que rompió récords en 2024.' },
     image: '/media/events/junior-worlds-2024.jpg',
+  },
+  {
+    date: '2026-10-01', category: 'motivation',
+    title: { en: 'Pressure. Focus.', es: 'Presión. Enfoque.' },
+    desc: { en: 'See everyone watching. See the goal.', es: 'Mira a todos observando. Mira la meta.' },
+    image: '/media/wall/pressure-focus.jpg',
+  },
+  {
+    date: '2026-09-20', category: 'motivation',
+    title: { en: 'Behind every strong karateka', es: 'Detrás de cada karateka fuerte' },
+    desc: { en: 'Is a sensei who believed in them first.', es: 'Hay un sensei que creyó en él primero.' },
+    image: '/media/wall/sensei-ladder.jpg',
+  },
+  {
+    date: '2026-08-15', category: 'motivation',
+    title: { en: 'Making after-school the best part of their day', es: 'Hacemos que la tarde sea la mejor parte de su día' },
+    desc: { en: 'Transportation, snack, karate class, homework time and a full dinner.', es: 'Transporte, snack, clase de karate, tarea y cena completa.' },
+    image: '/media/wall/after-school.jpg',
+    link: '/programs/after-school/',
   },
 ];

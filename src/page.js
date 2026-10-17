@@ -1,9 +1,10 @@
 // Inner pages: programs, dojos, events.
 import { gsap, $, $$, initCore } from './core.js';
-import { renderPage } from './events.js';
+import { renderPage, renderWall } from './events.js';
 
 initCore();
 renderPage();
+renderWall();
 
 // page hero entrance
 const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });

@@ -27,7 +27,7 @@ const CONFIG = {
 
 const LEAD_HEADERS = ['Timestamp', 'Name', 'Email', 'Phone', 'Student age', 'Program', 'Dojo', 'Language', 'Page', 'Landing page', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'Status', 'Notes'];
 const EVENT_HEADERS = ['published', 'date', 'date_label_en', 'date_label_es', 'category', 'title_en', 'title_es', 'location', 'desc_en', 'desc_es', 'image', 'link', 'featured'];
-const CATEGORIES = ['tournament', 'achievement', 'training', 'seminar', 'camp', 'graduation'];
+const CATEGORIES = ['tournament', 'achievement', 'training', 'seminar', 'camp', 'graduation', 'motivation'];
 const STATUSES = ['New', 'Contacted', 'Booked', 'Attended', 'Joined', 'Not interested'];
 
 /* =========================================================
@@ -224,12 +224,15 @@ function setup() {
 
   if (events.getLastRow() < 2) {
     const seed = [
-      [true, '2026-09-01', 'September 2026', 'Septiembre 2026', 'tournament', 'Battle of the Champions 2026', 'Battle of the Champions 2026', 'El Paso County Coliseum', 'Our own tournament, hosted by Alchemy Karate Academy with competitors from across the region.', 'Nuestro propio torneo, organizado por Alchemy Karate Academy con competidores de toda la región.', '/media/events/battle-of-the-champions-2026.jpg', '', true],
+      [true, '2026-09-05', '', '', 'tournament', 'Battle of the Champions 2026', 'Battle of the Champions 2026', 'El Paso Coliseum', 'Our own tournament, hosted by Alchemy Karate Academy with competitors from across the region.', 'Nuestro propio torneo, organizado por Alchemy Karate Academy con competidores de toda la región.', '/media/events/battle-of-the-champions-2026.jpg', '', true],
       [true, '2026-08-01', '2026', '2026', 'achievement', 'WAKO Youth World Championships', 'Mundial Juvenil WAKO', 'Jesolo, Italy', 'Team Alchemy athletes competed on the world stage representing Team USA.', 'Atletas de Team Alchemy compitieron en el escenario mundial representando a Team USA.', '/media/events/wako-worlds-2026.jpg', '', true],
       [true, '2026-07-15', '2026', '2026', 'achievement', 'Victor Montanez, Panamerican Champion', 'Victor Montanez, Campeón Panamericano', 'WAKO Panamerican & South American Championships', 'Gold in -79kg Kick Light and Light Contact.', 'Oro en -79kg Kick Light y Light Contact.', '/media/events/victor-montanez.jpg', '', false],
       [true, '2026-06-08', 'June 8, 10 & 12, 2026', '8, 10 y 12 de junio, 2026', 'camp', 'Karate Summer Camp', 'Campamento de Verano', 'All locations', 'Gymnastics, sparring and X-Zone camp days.', 'Días de gimnasia, sparring y X-Zone.', '/media/events/summer-camp-2026.jpg', '', false],
       [true, '2026-04-04', 'Saturday, April 4, 2026 · 10:00 AM', 'Sábado 4 de abril, 2026 · 10:00 AM', 'graduation', 'Belt Graduation Day', 'Día de Graduación de Cintas', 'Hanks High School, 2001 Lee Trevino Dr', 'All students, all belts, all locations. A day to celebrate the hard work.', 'Todos los alumnos, todas las cintas, todas las sedes. Un día para celebrar el esfuerzo.', '/media/events/graduation-2026-04.jpg', '', false],
       [true, '2026-03-09', 'March 9, 11 & 13, 2026', '9, 11 y 13 de marzo, 2026', 'camp', 'Spring Break Camps', 'Campamentos de Spring Break', 'All locations', 'Gymnastics camp, sparring camp and a fun day at X-Zone.', 'Campamento de gimnasia, de sparring y un día de diversión en X-Zone.', '/media/events/spring-break-2026.jpg', '', false],
+      [true, '2026-10-01', '', '', 'motivation', 'Pressure. Focus.', 'Presión. Enfoque.', '', 'See everyone watching. See the goal.', 'Mira a todos observando. Mira la meta.', '/media/wall/pressure-focus.jpg', '', false],
+      [true, '2026-09-20', '', '', 'motivation', 'Behind every strong karateka', 'Detrás de cada karateka fuerte', '', 'Is a sensei who believed in them first.', 'Hay un sensei que creyó en él primero.', '/media/wall/sensei-ladder.jpg', '', false],
+      [true, '2026-08-15', '', '', 'motivation', 'Making after-school the best part of their day', 'Hacemos que la tarde sea la mejor parte de su día', '', 'Transportation, snack, karate class, homework time and a full dinner.', 'Transporte, snack, clase de karate, tarea y cena completa.', '/media/wall/after-school.jpg', '/programs/after-school/', false],
       [true, '2026-02-01', '2026', '2026', 'seminar', 'Leadership Seminar', 'Seminario de Liderazgo', 'East location', 'Full leadership uniform, swords required, and a surprise for everyone.', 'Uniforme completo de liderazgo, espadas obligatorias y una sorpresa para todos.', '/media/events/leadership-seminar.jpg', '', false],
     ];
     events.getRange(2, 1, seed.length, seed[0].length).setValues(seed);

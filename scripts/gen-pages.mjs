@@ -260,6 +260,14 @@ ${tail()}`;
       <div class="ev-grid" id="eventsPage" aria-live="polite"></div>
       <p class="ev-empty" id="eventsEmpty" hidden>${t('New dates are announced soon. Follow us on Instagram for the latest.', 'Pronto anunciamos nuevas fechas. Síguenos en Instagram para enterarte primero.')} <a href="${SOCIAL.instagram}" target="_blank" rel="noopener">@alchemykarateacademy</a></p>
     </section>
+
+    <section class="pblock wall">
+      <div class="section-head">
+        <p class="eyebrow mono">${t('The Dojo Wall', 'El muro del dojo')}</p>
+        <h2 class="h2">${t('Mindset is trained too.', 'La mente también se entrena.')}</h2>
+      </div>
+      <div class="wall__grid" id="eventsWall"></div>
+    </section>
 ${ctaBand}
 ${tail()}`;
   write('events/index.html', html);

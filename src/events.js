@@ -11,6 +11,7 @@ const CAT = {
   seminar: { k: '導', en: 'Seminar', es: 'Seminario', group: 'training' },
   camp: { k: '夏', en: 'Camp', es: 'Campamento', group: 'training' },
   graduation: { k: '帯', en: 'Graduation', es: 'Graduación', group: 'training' },
+  motivation: { k: '心', en: 'Mindset', es: 'Mentalidad', group: 'wall' },
 };
 const L = {
   upcoming: { en: 'Upcoming', es: 'Próximo' },
@@ -51,12 +52,14 @@ export async function loadEvents() {
       if (json.ok && Array.isArray(json.events) && json.events.length) rows = json.events;
     } catch (e) { console.warn('[events] using fallback list', e); }
   }
-  const list = (rows || fallbackEvents).map(normalize).filter((e) => e.date && !isNaN(e.date) && e.title.en);
+  const all = (rows || fallbackEvents).map(normalize).filter((e) => e.date && !isNaN(e.date) && e.title.en);
+  const wall = all.filter((e) => e.category === 'motivation' && e.image).sort((a, b) => b.date - a.date);
+  const list = all.filter((e) => e.category !== 'motivation');
   const now = new Date(); now.setHours(0, 0, 0, 0);
   list.forEach((e) => { e.upcoming = e.date >= now; e.days = Math.round((e.date - now) / 864e5); });
   const upcoming = list.filter((e) => e.upcoming).sort((a, b) => a.date - b.date);
   const past = list.filter((e) => !e.upcoming).sort((a, b) => b.date - a.date);
-  cache = { upcoming, past, all: [...upcoming, ...past] };
+  cache = { upcoming, past, all: [...upcoming, ...past], wall };
   return cache;
 }
 
@@ -73,7 +76,7 @@ function card(e, { big = false } = {}) {
   const tag = e.link ? 'a' : 'article';
   const href = e.link ? ` href="${esc(e.link)}" target="_blank" rel="noopener"` : '';
   return `<${tag} class="ev ev--${esc(e.category)}${big ? ' ev--big' : ''}${e.upcoming ? ' is-up' : ''} tilt reveal"${href}>
-    <div class="ev__media"><span class="ev__k" aria-hidden="true">${c.k}</span>${e.image ? `<img class="slot" src="${esc(e.image)}" alt="${esc(e.title.en)}" loading="lazy" />` : ''}</div>
+    <div class="ev__media"${e.image ? ` data-zoom="${esc(e.image)}"` : ''}><span class="ev__k" aria-hidden="true">${c.k}</span>${e.image ? `<img class="ev__bg" src="${esc(e.image)}" alt="" aria-hidden="true" loading="lazy" /><img class="slot ev__img" src="${esc(e.image)}" alt="${esc(e.title.en)}" loading="lazy" />` : ''}</div>
     <div class="ev__body">
       <p class="ev__meta mono"><span class="ev__cat">${tx(c)}</span><span>${esc(dateText(e))}</span></p>
       ${badge}
@@ -91,7 +94,7 @@ function after(root) {
     const ok = () => img.closest('.ev')?.classList.add('has-img');
     if (img.complete) { img.naturalWidth ? ok() : img.remove(); }
     img.addEventListener('load', ok);
-    img.addEventListener('error', () => img.remove());
+    img.addEventListener('error', () => { img.closest('.ev__media')?.querySelector('.ev__bg')?.remove(); img.closest('.ev__media')?.removeAttribute('data-zoom'); img.remove(); });
   });
   initReveals(root);
   initTilt(root);
@@ -152,3 +155,52 @@ export async function renderPage() {
     document.head.appendChild(s);
   }
 }
+
+/* ---------- The Dojo Wall (motivation posters) ---------- */
+export async function renderWall() {
+  const el = $('#eventsWall');
+  if (!el) return;
+  const { wall } = await loadEvents();
+  const sec = el.closest('section');
+  if (!wall.length) { sec.hidden = true; return; }
+  const draw = () => {
+    el.innerHTML = wall.map((w, i) => `<figure class="poster reveal" style="--r:${(i % 2 ? 1 : -1) * (1 + (i % 3))}deg">
+      <button type="button" class="poster__btn" data-zoom="${esc(w.image)}" aria-label="${esc(tx(w.title))}">
+        <img src="${esc(w.image)}" alt="${esc(tx(w.title))}" loading="lazy" />
+      </button>
+      <figcaption><b>${esc(tx(w.title))}</b>${tx(w.desc) ? `<span>${esc(tx(w.desc))}</span>` : ''}${w.link ? `<a href="${esc(w.link)}" class="mono">${lang() === 'es' ? 'Ver más' : 'Learn more'} →</a>` : ''}</figcaption>
+    </figure>`).join('');
+    initReveals(el);
+    ScrollTrigger.refresh();
+  };
+  draw();
+  onLangChange(draw);
+}
+
+/* ---------- lightbox for flyers and posters ---------- */
+let lb;
+function lightbox(src, alt) {
+  if (!lb) {
+    lb = document.createElement('div');
+    lb.className = 'lightbox';
+    lb.innerHTML = '<button type="button" class="lightbox__close" aria-label="Close"><span></span><span></span></button><img alt="" />';
+    lb.addEventListener('click', (e) => { if (e.target.tagName !== 'IMG') closeLb(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && lb.classList.contains('is-open')) closeLb(); });
+    document.body.appendChild(lb);
+  }
+  const img = lb.querySelector('img');
+  img.src = src; img.alt = alt || '';
+  lb.classList.add('is-open');
+  gsap.fromTo(lb, { opacity: 0 }, { opacity: 1, duration: 0.3 });
+  gsap.fromTo(img, { scale: 0.9, y: 30 }, { scale: 1, y: 0, duration: 0.6, ease: 'expo.out' });
+}
+function closeLb() {
+  gsap.to(lb, { opacity: 0, duration: 0.25, onComplete: () => lb.classList.remove('is-open') });
+}
+document.addEventListener('click', (e) => {
+  const z = e.target.closest('[data-zoom]');
+  if (!z || e.target.closest('a[href]:not([data-zoom])')) return;
+  // event cards with a link still open the link from the text; the image zooms
+  e.preventDefault();
+  lightbox(z.dataset.zoom, z.querySelector('img:not(.ev__bg)')?.alt);
+});
