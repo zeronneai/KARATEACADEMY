@@ -3,7 +3,8 @@
 
 const es = {
   'intro.kicker': 'Alchemy Karate Academy · El Paso, TX',
-  'intro.hold': 'Mantén para romper',
+  'intro.cue': 'Haz scroll para romper la tabla',
+  'intro.cueTouch': 'Desliza hacia arriba para romper la tabla',
   'intro.hint': 'Presiona y mantén. Respira. Golpea.',
   'intro.skip': 'Saltar intro',
   'intro.sound': 'Sonido',
@@ -102,6 +103,7 @@ const es = {
 
 // English strings that only exist in JS (the rest is read from the HTML)
 const en = {
+  'intro.cueTouch': 'Swipe up to break the board',
   'j.errFields': 'Please check your name, email and a 10 digit phone number.',
   'j.errSend': 'We could not send it. Please try again or call your closest dojo.',
 };

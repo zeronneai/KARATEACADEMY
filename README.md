@@ -6,7 +6,8 @@ Landing premium para Alchemy Karate Academy (El Paso, TX). Reemplaza el sitio ac
 
 El lema de la academia es *Turning the ordinary to extraordinary*. Todo el sitio cuenta esa transformación.
 
-1. **Intro interactiva: romper la tabla.** En Four O's el reloj se desarma solo y el usuario mira. Aquí el usuario *participa*: mantiene presionado el botón 拳, la tabla tiembla, se agrieta, suena un zumbido que sube y al llegar al 100% la tabla explota en astillas con un golpe sintetizado y un 気合 (kiai) gigante. Es el primer "rompimiento de tabla" de cada visitante. Funciona con mouse, touch (mantener presionado) y teclado (espacio). Después del kiai, el logo de Alchemy cae de golpe con onda expansiva, retumbe y un destello metálico, y luego vuela a su lugar en la barra de navegación mientras se revela el sitio. Tiene "Skip intro", control de sonido y solo se muestra una vez por sesión.
+1. **Intro: la patada con el scroll.** Pantalla de carga con porcentaje real; luego cada scroll (o swipe en celular) avanza el video cuadro por cuadro desde el punto de vista del sensei que sostiene la tabla. En el impacto suena el crack, y al final el logo cae y vuela a la esquina. Los 96 cuadros están en `public/media/intro/desktop` y `/mobile`. El hero continúa con el loop de la misma escena (`public/media/hero/`).
+   *Versión anterior (tabla hecha con código, ya reemplazada):* En Four O's el reloj se desarma solo y el usuario mira. Aquí el usuario *participa*: mantiene presionado el botón 拳, la tabla tiembla, se agrieta, suena un zumbido que sube y al llegar al 100% la tabla explota en astillas con un golpe sintetizado y un 気合 (kiai) gigante. Es el primer "rompimiento de tabla" de cada visitante. Funciona con mouse, touch (mantener presionado) y teclado (espacio). Después del kiai, el logo de Alchemy cae de golpe con onda expansiva, retumbe y un destello metálico, y luego vuela a su lugar en la barra de navegación mientras se revela el sitio. Tiene "Skip intro", control de sonido y solo se muestra una vez por sesión.
 2. **Hero "El corte".** La palabra ORDINARY aparece en gris, un corte rojo de karate chop la parte en dos y aparece EXTRAORDINARY en oro con efecto de transmutación. Detrás gira un círculo alquímico que se dibuja trazo por trazo.
 3. **El Camino (scroll horizontal fijado).** 7 cintas, de blanca a negra. Cada una con su virtud en kanji (礼 Respeto, 律 Disciplina, 集中 Enfoque, 自信 Confianza, 勇気 Valor, 指導 Liderazgo). La cinta física se va tejiendo en la parte de abajo y el color ambiental cambia con cada nivel.
 4. **Programas (bento).** Kids Karate, After-School (transporte, snack, clase, tarea, cena, sacado de su flyer de IG), Kickboxing adultos, Equipo de Competencia, Programa de Liderazgo, Campamentos y Cumpleaños. Tarjetas con spotlight y tilt 3D.
@@ -36,7 +37,7 @@ Scroll-driven storytelling, tipografía gigante como hero, micro-interacciones, 
 
 ## Stack
 
-Vite + vanilla JS, GSAP (ScrollTrigger), Lenis (smooth scroll). Fuentes self-hosted con Fontsource (Big Shoulders Display, Inter Tight, IBM Plex Mono, Noto Serif JP). Audio 100% sintetizado con Web Audio (sin archivos). Respeta `prefers-reduced-motion`.
+Vite + vanilla JS, GSAP (ScrollTrigger), Lenis (smooth scroll). Fuentes self-hosted con Fontsource (Big Shoulders Display, Inter Tight, Barlow Condensed, Noto Serif JP). Audio 100% sintetizado con Web Audio (sin archivos). Respeta `prefers-reduced-motion`.
 
 ```bash
 npm install
@@ -50,7 +51,8 @@ Deploy en Vercel: importar el repo, framework "Vite". Agregar la variable `VITE_
 
 Todo va en `public/media/` con nombres fijos. La tabla completa con tamaños está en [`public/media/LEEME.md`](public/media/LEEME.md). Si un archivo no existe, su espacio se oculta solo y el diseño se ve igual.
 
-- `media/hero.mp4` + `media/hero.jpg`: fondo del hero (video en loop o foto).
+- `media/hero/hero-desktop.mp4` (16:9) y `hero-mobile.mp4` (9:16), con sus `.jpg` de poster: loop de fondo del hero.
+- `media/intro/desktop/001-096.webp` y `media/intro/mobile/001-096.webp`: cuadros del video de la intro.
 - `media/programs/`: `kids-karate`, `after-school`, `kickboxing`, `competition`, `leadership`, `camps` (.jpg).
 - `media/arena/`: `wako-worlds`, `battle-of-the-champions`, `panamerican` (.jpg).
 - `media/gallery/01.jpg` a `10.jpg`: carrusel "Life at the dojo" (aparece solo cuando hay fotos).
@@ -66,6 +68,6 @@ Todo va en `public/media/` con nombres fijos. La tabla completa con tamaños est
 - [ ] Conectar el formulario: crear el Google Sheet y poner `VITE_SHEETS_ENDPOINT` en Vercel (guía en `apps-script/README.md`). Sin eso, el formulario corre en modo demo.
 - [ ] Confirmar el dominio final (`SITE_URL` en `src/data/site.js`, ahora `alchemykarateacademy.com`) y dar de alta el sitemap en Google Search Console.
 - [ ] Fotos de eventos en `public/media/events/` y de dojos en `public/media/locations/`.
-- [ ] Video cinematográfico de la intro (patada que corta la tabla).
+- [x] Video de la intro (patada que rompe la tabla) y loop del hero.
 - [ ] Revisar con Eddie el contador de "2,500+ familias y fans" (basado en seguidores de IG).
 - [ ] Siguiente fase opcional: página de horarios por dojo, galería del Battle of the Champions, sección Leadership Program.

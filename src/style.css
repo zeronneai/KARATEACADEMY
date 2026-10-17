@@ -885,3 +885,48 @@ html[lang="es"] [data-l="es"] { display: inline; }
 .lightbox__close { position: absolute; top: 16px; right: 16px; width: 46px; height: 46px; border-radius: 50%; border: 1px solid var(--line); }
 .lightbox__close span { position: absolute; left: 14px; right: 14px; top: 50%; height: 1.5px; background: var(--bone); }
 .lightbox__close span:first-child { transform: rotate(45deg); } .lightbox__close span:last-child { transform: rotate(-45deg); }
+
+/* =========================================================
+   INTRO v2: scroll-scrubbed video frames
+   ========================================================= */
+.intro { background: #050506; }
+.intro__canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.intro__shade { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse 80% 70% at 50% 50%, transparent 55%, rgba(0,0,0,.55) 100%), linear-gradient(0deg, rgba(0,0,0,.7) 0%, transparent 32%); }
+.intro__ui { position: absolute; left: 0; right: 0; bottom: clamp(70px, 12vh, 120px); display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; pointer-events: none; padding: 0 16px; }
+.intro__ui .intro__kicker { color: rgba(242,237,228,.7); }
+.intro__load { font-family: var(--f-display); font-weight: 900; font-size: clamp(3rem, 8vw, 5.5rem); line-height: 1; color: var(--bone); display: flex; align-items: flex-start; gap: 4px; text-shadow: 0 0 40px rgba(227,18,27,.6); }
+.intro__load span { font-size: .4em; margin-top: .25em; color: var(--red-2); }
+.intro__cue { display: flex; flex-direction: column; align-items: center; gap: 12px; opacity: 0; transform: translateY(10px); transition: opacity .6s, transform .6s var(--ease); color: var(--bone); }
+.intro__cue.is-on { opacity: 1; transform: none; }
+.intro__cue .mono { font-size: 16px; letter-spacing: .14em; text-shadow: 0 2px 20px rgba(0,0,0,.8); }
+.intro__mouse { width: 26px; height: 42px; border: 2px solid rgba(242,237,228,.8); border-radius: 14px; position: relative; }
+.intro__mouse i { position: absolute; left: 50%; top: 8px; width: 4px; height: 8px; margin-left: -2px; border-radius: 2px; background: var(--red-2); animation: wheel 1.6s var(--ease) infinite; }
+@keyframes wheel { 0% { transform: translateY(0); opacity: 1; } 70% { transform: translateY(12px); opacity: 0; } 100% { opacity: 0; } }
+@media (hover: none) { .intro__mouse { border-radius: 50%; width: 34px; height: 34px; } .intro__mouse i { top: 18px; animation: swipe 1.6s var(--ease) infinite; } }
+@keyframes swipe { 0% { transform: translateY(0); opacity: 1; } 70% { transform: translateY(-14px); opacity: 0; } 100% { opacity: 0; } }
+.intro__bar { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: rgba(255,255,255,.08); }
+.intro__bar i { display: block; height: 100%; background: linear-gradient(90deg, var(--red), var(--gold-2)); transform-origin: left; transform: scaleX(0); box-shadow: 0 0 12px var(--red); }
+.intro__corner { z-index: 2; }
+
+/* =========================================================
+   HERO v2: looping video background
+   ========================================================= */
+.hero__media video { width: 100%; height: 100%; object-fit: cover; opacity: 1; filter: none; }
+.hero__media.is-ready video { opacity: 1; }
+.hero.has-video .hero__media::after {
+  background:
+    linear-gradient(90deg, rgba(10,10,11,.88) 0%, rgba(10,10,11,.62) 38%, rgba(10,10,11,.25) 70%, rgba(10,10,11,.35) 100%),
+    linear-gradient(0deg, var(--ink) 0%, rgba(10,10,11,0) 35%),
+    linear-gradient(180deg, rgba(10,10,11,.6) 0%, rgba(10,10,11,0) 22%);
+}
+.hero.has-video .sigil { opacity: .28; }
+.hero.has-video .hero__glow, .hero.has-video .hero__kanji { display: none; }
+@media (max-aspect-ratio: 1/1) {
+  .hero.has-video .hero__media::after {
+    background: linear-gradient(0deg, var(--ink) 0%, rgba(10,10,11,.75) 45%, rgba(10,10,11,.35) 75%, rgba(10,10,11,.55) 100%);
+  }
+}
+.intro__load { transition: opacity .4s, transform .4s var(--ease), height .4s; }
+.intro__load.is-done { opacity: 0; transform: translateY(-10px); height: 0; overflow: hidden; }
+.intro__ui { transition: opacity .5s; }
+.intro__ui.is-gone { opacity: 0; }

@@ -15,6 +15,8 @@
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <link rel="preload" as="image" href="/logo.webp" />
+  <link rel="preload" as="image" href="/media/intro/desktop/001.webp" media="(min-aspect-ratio: 1/1)" />
+  <link rel="preload" as="image" href="/media/intro/mobile/001.webp" media="(max-aspect-ratio: 1/1)" />
   <meta property="og:image" content="https://alchemykarateacademy.com/logo.webp" />
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "SportsOrganization", "@id": "https://alchemykarateacademy.com/#org", "name": "Alchemy Karate Academy", "alternateName": "Team Alchemy", "url": "https://alchemykarateacademy.com/", "logo": "https://alchemykarateacademy.com/logo.webp", "email": "Alchemykarateacademy@live.com", "slogan": "Turning the ordinary into extraordinary", "sport": ["Karate", "Kickboxing"], "sameAs": ["https://www.instagram.com/alchemykarateacademy", "https://www.facebook.com/ALCHEMYKARATEACADEMY"], "location": [{"@type": "SportsActivityLocation", "@id": "https://alchemykarateacademy.com/locations/east/#dojo", "name": "Alchemy Karate Academy · East", "url": "https://alchemykarateacademy.com/locations/east/", "telephone": "+19159215677", "address": {"@type": "PostalAddress", "streetAddress": "1613 N Zaragoza Rd, Ste 104", "addressLocality": "El Paso", "addressRegion": "TX", "postalCode": "79936", "addressCountry": "US"}}, {"@type": "SportsActivityLocation", "@id": "https://alchemykarateacademy.com/locations/far-east/#dojo", "name": "Alchemy Karate Academy · Far East", "url": "https://alchemykarateacademy.com/locations/far-east/", "telephone": "+19155880753", "address": {"@type": "PostalAddress", "streetAddress": "3560 N Zaragoza Rd, Suite 210", "addressLocality": "El Paso", "addressRegion": "TX", "postalCode": "79938", "addressCountry": "US"}}, {"@type": "SportsActivityLocation", "@id": "https://alchemykarateacademy.com/locations/horizon/#dojo", "name": "Alchemy Karate Academy · Horizon", "url": "https://alchemykarateacademy.com/locations/horizon/", "telephone": "+19155004072", "address": {"@type": "PostalAddress", "streetAddress": "13750 Eastlake Blvd, Suite 200", "addressLocality": "El Paso", "addressRegion": "TX", "postalCode": "79928", "addressCountry": "US"}}]}</script>
 </head>
@@ -23,42 +25,28 @@
   <!-- =========================================================
        INTRO: HOLD TO BREAK THE BOARD
        ========================================================= -->
+  <!-- =========================================================
+       INTRO: frame-by-frame video driven by scroll (public/media/intro/)
+       ========================================================= -->
   <div id="intro" class="intro" role="dialog" aria-label="Intro">
-    <div class="intro__bg" aria-hidden="true"></div>
-    <div class="intro__grid" aria-hidden="true"></div>
-    <div class="intro__stage" id="introStage">
+    <canvas class="intro__canvas" id="introCanvas" aria-hidden="true"></canvas>
+    <div class="intro__shade" aria-hidden="true"></div>
+    <div class="intro__ui" id="introUi">
       <p class="intro__kicker mono" data-i18n="intro.kicker">Alchemy Karate Academy · El Paso, TX</p>
-
-      <div class="board" id="board" aria-hidden="true">
-        <div class="board__half board__half--l"></div>
-        <div class="board__half board__half--r"></div>
-        <svg class="board__crack" viewBox="0 0 100 100" preserveAspectRatio="none">
-          <polyline points="50,0 47,12 53,25 46,40 54,55 47,70 52,85 49,100" />
-        </svg>
-        <span class="board__kanji">錬金</span>
+      <div class="intro__load" id="introLoad"><b id="introPct">0</b><span>%</span></div>
+      <div class="intro__cue" id="introCue">
+        <span class="intro__mouse" aria-hidden="true"><i></i></span>
+        <span class="mono" data-i18n="intro.cue">Scroll to break the board</span>
       </div>
-
-      <button class="hold" id="holdBtn" type="button">
-        <svg class="hold__ring" viewBox="0 0 120 120" aria-hidden="true">
-          <circle class="hold__track" cx="60" cy="60" r="54" />
-          <circle class="hold__prog" cx="60" cy="60" r="54" />
-        </svg>
-        <span class="hold__fist" aria-hidden="true">拳</span>
-        <span class="hold__label" data-i18n="intro.hold">Hold to break</span>
-      </button>
-      <p class="intro__hint mono" data-i18n="intro.hint">Press and hold. Breathe. Strike.</p>
     </div>
-
-    <div class="intro__kiai" aria-hidden="true">気合</div>
+    <div class="intro__bar" aria-hidden="true"><i id="introBar"></i></div>
     <div class="intro__logo" id="introLogo" aria-hidden="true">
       <span class="intro__shock"></span>
       <span class="intro__shock intro__shock--2"></span>
       <img src="/logo.webp" alt="" width="923" height="845" />
       <span class="shine"></span>
     </div>
-    <canvas class="intro__splinters" id="splinters" aria-hidden="true"></canvas>
     <div class="intro__flash" aria-hidden="true"></div>
-
     <div class="intro__corner">
       <button class="intro__btn mono" id="soundBtn" type="button" aria-pressed="true"><span class="dot"></span><span data-i18n="intro.sound">Sound</span></button>
       <button class="intro__btn mono" id="skipBtn" type="button" data-i18n="intro.skip">Skip intro</button>
@@ -87,10 +75,9 @@
         <circle cx="300" cy="550" r="10" /><circle cx="83.5" cy="175" r="10" /><circle cx="516.5" cy="175" r="10" />
       </svg>
       <!-- IMAGEN / VIDEO HERO: public/media/hero.mp4 (+ poster public/media/hero.jpg) -->
-      <div class="hero__media media-slot" aria-hidden="true">
-        <video class="slot" muted loop playsinline autoplay preload="metadata" poster="/media/hero.jpg">
-          <source src="/media/hero.mp4" type="video/mp4" />
-        </video>
+      <!-- HERO LOOP: public/media/hero/hero-desktop.mp4 (16:9) y hero-mobile.mp4 (9:16) -->
+      <div class="hero__media" aria-hidden="true">
+        <video id="heroVideo" muted loop playsinline autoplay preload="auto"></video>
       </div>
       <div class="hero__glow" aria-hidden="true"></div>
       <div class="hero__kanji" aria-hidden="true">空手道</div>

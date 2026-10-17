@@ -106,107 +106,148 @@ soundBtn.addEventListener('click', () => {
 });
 
 /* ---------------------------------------------------------
-   INTRO: HOLD TO BREAK
+   INTRO: the scroll plays the video frame by frame
+   Frames live in public/media/intro/desktop and /mobile (001.webp ... 096.webp)
    --------------------------------------------------------- */
+const FRAMES = 96;
+const BREAK_AT = 0.56; // progress where the board snaps (around frame 54)
+
 function runIntro() {
   const intro = $('#intro');
-  const board = $('#board');
-  const holdBtn = $('#holdBtn');
-  const prog = $('.hold__prog');
-  const crack = $('.board__crack polyline');
-  const hint = $('.intro__hint');
-  const L = $('.board__half--l');
-  const R = $('.board__half--r');
+  const cvs = $('#introCanvas');
+  const ctx = cvs.getContext('2d');
+  const set = innerHeight > innerWidth ? 'mobile' : 'desktop';
+  const src = (i) => `/media/intro/${set}/${String(i + 1).padStart(3, '0')}.webp`;
+  const imgs = new Array(FRAMES);
+  let loaded = 0; let ready = false; let done = false; let interacted = false; let broke = false;
+  let target = 0; let current = 0; let lastDrawn = -1;
 
-  const C = 2 * Math.PI * 54;
-  prog.style.strokeDasharray = C;
-  prog.style.strokeDashoffset = C;
-  const crackLen = crack.getTotalLength ? crack.getTotalLength() : 110;
-  crack.style.strokeDasharray = crackLen;
-  crack.style.strokeDashoffset = crackLen;
+  function size() {
+    const dpr = Math.min(devicePixelRatio || 1, 2);
+    cvs.width = Math.round(innerWidth * dpr); cvs.height = Math.round(innerHeight * dpr);
+    lastDrawn = -1;
+  }
+  size();
+  const onResize = () => { size(); draw(Math.round(current * (FRAMES - 1))); };
+  window.addEventListener('resize', onResize);
 
-  let progress = 0;
-  let holding = false;
-  let done = false;
-  let interacted = false;
+  const okImg = (im) => im && im.complete && im.naturalWidth;
+  function nearest(i) {
+    for (let d = 0; d < FRAMES; d++) {
+      if (okImg(imgs[i - d])) return imgs[i - d];
+      if (okImg(imgs[i + d])) return imgs[i + d];
+    }
+    return null;
+  }
+  function draw(i) {
+    const img = nearest(i);
+    if (!img) return;
+    const cw = cvs.width; const ch = cvs.height;
+    const sc = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
+    const w = img.naturalWidth * sc; const h = img.naturalHeight * sc;
+    ctx.drawImage(img, (cw - w) / 2, (ch - h) / 2, w, h);
+    lastDrawn = i;
+  }
 
-  gsap.from('.intro__stage > *', { y: 30, opacity: 0, duration: 1.1, stagger: 0.12, ease: 'power3.out', delay: 0.2 });
-
-  const nudgeTimer = setTimeout(() => { if (!interacted) hint.classList.add('is-nudge'); }, 6000);
-
-  const start = (e) => {
-    if (done) return;
-    if (e && e.cancelable) e.preventDefault();
-    interacted = true; holding = true;
-    hint.classList.remove('is-nudge');
-    holdBtn.classList.add('is-holding');
-    sound.startHum();
+  // preload every frame, showing a real loading percentage
+  const pct = $('#introPct');
+  const onLoad = () => {
+    loaded++;
+    pct.textContent = Math.round((loaded / FRAMES) * 100);
+    if (lastDrawn < 0) draw(0);
+    if (loaded === FRAMES) enable();
   };
-  const stop = () => { holding = false; holdBtn.classList.remove('is-holding'); };
+  for (let i = 0; i < FRAMES; i++) {
+    const im = new Image();
+    im.decoding = 'async';
+    im.onload = onLoad; im.onerror = onLoad;
+    im.src = src(i);
+    imgs[i] = im;
+  }
+  const failsafe = setTimeout(enable, 10000); // slow connection: start anyway with what loaded
 
-  [holdBtn, board].forEach((el) => {
-    el.addEventListener('pointerdown', (e) => { el.setPointerCapture?.(e.pointerId); start(e); });
-    el.addEventListener('pointerup', stop);
-    el.addEventListener('pointercancel', stop);
-    el.addEventListener('contextmenu', (e) => e.preventDefault());
-  });
-  const onKeyDown = (e) => { if ((e.code === 'Space' || e.code === 'Enter') && !e.repeat) { e.preventDefault(); start(); } };
-  const onKeyUp = (e) => { if (e.code === 'Space' || e.code === 'Enter') stop(); };
-  window.addEventListener('keydown', onKeyDown);
-  window.addEventListener('keyup', onKeyUp);
+  gsap.from('#introUi', { y: 20, opacity: 0, duration: 1, ease: 'power3.out', delay: 0.15 });
 
-  const tick = (time, dt) => {
+  function enable() {
+    if (ready) return;
+    ready = true;
+    clearTimeout(failsafe);
+    $('#introLoad').classList.add('is-done');
+    setTimeout(() => $('#introCue').classList.add('is-on'), 350);
+  }
+
+  const push = (d) => {
+    if (!ready || done) return;
+    target = Math.min(1, Math.max(0, target + d));
+    if (!interacted && d > 0) {
+      interacted = true;
+      $('#introUi').classList.add('is-gone');
+      sound.startHum();
+    }
+  };
+  const onWheel = (e) => { e.preventDefault(); push(e.deltaY / 2400); };
+  let ty = null;
+  const onTouchStart = (e) => { ty = e.touches[0].clientY; };
+  const onTouchMove = (e) => {
+    if (ty == null) return;
+    const y = e.touches[0].clientY;
+    push((ty - y) / (innerHeight * 1.5));
+    ty = y;
+    e.preventDefault();
+  };
+  const onKey = (e) => {
+    if (['ArrowDown', 'PageDown', 'Space'].includes(e.code)) { e.preventDefault(); push(0.12); }
+    if (['ArrowUp', 'PageUp'].includes(e.code)) { e.preventDefault(); push(-0.12); }
+  };
+  window.addEventListener('wheel', onWheel, { passive: false });
+  window.addEventListener('touchstart', onTouchStart, { passive: true });
+  window.addEventListener('touchmove', onTouchMove, { passive: false });
+  window.addEventListener('keydown', onKey);
+
+  if (matchMedia('(hover: none)').matches) {
+    const cueText = $('#introCue .mono');
+    cueText.dataset.i18n = 'intro.cueTouch';
+    cueText.textContent = t('intro.cueTouch');
+  }
+
+  const bar = $('#introBar');
+  const tick = () => {
     if (done) return;
-    const s = dt / 1000;
-    progress += holding ? s / 1.35 : -s / 0.7;
-    progress = Math.max(0, Math.min(1, progress));
-
-    prog.style.strokeDashoffset = C * (1 - progress);
-    holdBtn.style.setProperty('--charge', progress);
-    const cp = Math.max(0, (progress - 0.35) / 0.65);
-    crack.style.strokeDashoffset = crackLen * (1 - cp);
-
-    const amp = progress * progress * 7;
-    gsap.set(board, {
-      x: (Math.random() - 0.5) * amp,
-      y: (Math.random() - 0.5) * amp,
-      rotation: (Math.random() - 0.5) * amp * 0.25,
-      scale: 1 + progress * 0.06,
-    });
-    sound.setCharge(progress);
-
-    if (progress >= 1) breakIt();
+    current += (target - current) * 0.12;
+    if (Math.abs(target - current) < 0.0005) current = target;
+    const f = Math.round(current * (FRAMES - 1));
+    if (f !== lastDrawn) draw(f);
+    bar.style.transform = `scaleX(${current})`;
+    if (!broke) sound.setCharge(Math.min(1, current / BREAK_AT));
+    if (!broke && current >= BREAK_AT) {
+      broke = true;
+      sound.stopHum();
+      sound.crack();
+      if (navigator.vibrate) navigator.vibrate([30, 40, 80]);
+      gsap.fromTo('.intro__flash', { opacity: 0.6 }, { opacity: 0, duration: 0.5, ease: 'power2.out' });
+      gsap.fromTo(cvs, { x: -14, y: 6 }, { x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1, 0.3)' });
+    }
+    if (current >= 0.995) end();
   };
   gsap.ticker.add(tick);
 
   function cleanup() {
     done = true;
-    clearTimeout(nudgeTimer);
+    clearTimeout(failsafe);
     gsap.ticker.remove(tick);
-    window.removeEventListener('keydown', onKeyDown);
-    window.removeEventListener('keyup', onKeyUp);
+    window.removeEventListener('wheel', onWheel);
+    window.removeEventListener('touchstart', onTouchStart);
+    window.removeEventListener('touchmove', onTouchMove);
+    window.removeEventListener('keydown', onKey);
+    window.removeEventListener('resize', onResize);
     sound.stopHum();
   }
 
-  function breakIt() {
+  function end() {
     if (done) return;
     cleanup();
-    sound.crack();
-    if (navigator.vibrate) navigator.vibrate([30, 40, 80]);
-    splinters(board);
-
-    const tl = gsap.timeline();
-    tl.set(board, { x: 0, y: 0, rotation: 0 })
-      .to('.intro__flash', { opacity: 0.9, duration: 0.05 })
-      .to('.intro__flash', { opacity: 0, duration: 0.5, ease: 'power2.out' })
-      .to(L, { xPercent: -90, yPercent: 40, rotation: -38, opacity: 0, duration: 1.1, ease: 'power3.out' }, '<')
-      .to(R, { xPercent: 90, yPercent: 30, rotation: 34, opacity: 0, duration: 1.1, ease: 'power3.out' }, '<')
-      .to('.board__crack, .board__kanji', { opacity: 0, duration: 0.1 }, '<')
-      .to('#introStage', { keyframes: [{ x: -14, y: 8 }, { x: 12, y: -6 }, { x: -6, y: 4 }, { x: 0, y: 0 }], duration: 0.35 }, '<')
-      .to(['.hold', '.intro__hint', '.intro__kicker'], { opacity: 0, y: 20, duration: 0.4 }, '<')
-      .fromTo('.intro__kiai', { opacity: 0, scale: 0.55 }, { opacity: 1, scale: 1, duration: 0.45, ease: 'back.out(2)' }, '<0.05')
-      .to('.intro__kiai', { opacity: 0, scale: 1.4, filter: 'blur(12px)', duration: 0.45, ease: 'power2.in' }, '+=0.15')
-      .add(logoSequence(), '-=0.2');
+    draw(FRAMES - 1);
+    gsap.timeline().add(logoSequence(), 0.25);
   }
 
   // Logo slams in, shockwave, shine, then flies into the nav
@@ -219,7 +260,7 @@ function runIntro() {
       .to('.intro__flash', { opacity: 0.35, duration: 0.04 })
       .to('.intro__flash', { opacity: 0, duration: 0.45 })
       .fromTo('.intro__shock', { scale: 0.3, opacity: 1 }, { scale: 2.6, opacity: 0, duration: 0.9, stagger: 0.12, ease: 'expo.out' }, '<')
-      .to('#introStage', { keyframes: [{ x: -10, y: 6 }, { x: 8, y: -5 }, { x: -3, y: 2 }, { x: 0, y: 0 }], duration: 0.3 }, '<')
+      .to('#introCanvas', { keyframes: [{ x: -10, y: 6 }, { x: 8, y: -5 }, { x: -3, y: 2 }, { x: 0, y: 0 }], duration: 0.3 }, '<')
       .fromTo(logo, { scale: 0.94 }, { scale: 1, duration: 0.6, ease: 'elastic.out(1, 0.4)' }, '<')
       .fromTo('#introLogo .shine', { backgroundPosition: '160% 0' }, { backgroundPosition: '-60% 0', duration: 0.9, ease: 'power2.inOut' }, '<0.15')
       .add(() => flyToNav(logo), '+=0.25');
@@ -235,7 +276,7 @@ function runIntro() {
     intro.style.pointerEvents = 'none';
     heroIn({ skipBrand: true });
     gsap.timeline({ onComplete: finish })
-      .to(['.intro__bg', '.intro__grid', '.intro__corner', '.intro__splinters'], { opacity: 0, duration: 0.8, ease: 'power2.inOut' }, 0)
+      .to(['.intro__canvas', '.intro__shade', '.intro__corner', '.intro__bar', '.intro__ui'], { opacity: 0, duration: 0.9, ease: 'power2.inOut' }, 0)
       .to(logo, { x: dx, y: dy, scale, duration: 1.05, ease: 'expo.inOut' }, 0)
       .to('#introLogo img', { filter: 'drop-shadow(0 4px 14px rgba(0,0,0,.5))', duration: 1 }, 0);
   }
@@ -257,53 +298,6 @@ function runIntro() {
   });
 }
 
-function splinters(board) {
-  const cvs = $('#splinters');
-  const ctx = cvs.getContext('2d');
-  const dpr = Math.min(devicePixelRatio || 1, 2);
-  cvs.width = innerWidth * dpr; cvs.height = innerHeight * dpr;
-  ctx.scale(dpr, dpr);
-  const r = board.getBoundingClientRect();
-  const cx = r.left + r.width / 2;
-  const colors = ['#c99a62', '#a8773f', '#8a5a2b', '#e3c08d', '#5e3a18'];
-  const parts = Array.from({ length: 90 }, () => {
-    const y = r.top + Math.random() * r.height;
-    const dir = Math.random() < 0.5 ? -1 : 1;
-    return {
-      x: cx + (Math.random() - 0.5) * 18, y,
-      vx: dir * (4 + Math.random() * 14), vy: -6 + Math.random() * 8,
-      w: 2 + Math.random() * 5, h: 6 + Math.random() * 22,
-      a: Math.random() * Math.PI, va: (Math.random() - 0.5) * 0.5,
-      c: colors[(Math.random() * colors.length) | 0], life: 1,
-    };
-  });
-  const sparks = Array.from({ length: 40 }, () => ({
-    x: cx, y: r.top + Math.random() * r.height,
-    vx: (Math.random() - 0.5) * 26, vy: (Math.random() - 0.5) * 26, life: 1,
-  }));
-  let raf;
-  const step = () => {
-    ctx.clearRect(0, 0, innerWidth, innerHeight);
-    let alive = false;
-    parts.forEach((p) => {
-      if (p.life <= 0) return; alive = true;
-      p.vy += 0.55; p.vx *= 0.985; p.x += p.vx; p.y += p.vy; p.a += p.va; p.life -= 0.011;
-      ctx.save(); ctx.globalAlpha = Math.max(0, p.life); ctx.translate(p.x, p.y); ctx.rotate(p.a);
-      ctx.fillStyle = p.c; ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h); ctx.restore();
-    });
-    sparks.forEach((s) => {
-      if (s.life <= 0) return; alive = true;
-      s.x += s.vx; s.y += s.vy; s.vx *= 0.9; s.vy *= 0.9; s.life -= 0.04;
-      ctx.globalAlpha = Math.max(0, s.life); ctx.fillStyle = '#ff2a33';
-      ctx.beginPath(); ctx.arc(s.x, s.y, 2, 0, Math.PI * 2); ctx.fill();
-    });
-    ctx.globalAlpha = 1;
-    if (alive) raf = requestAnimationFrame(step);
-  };
-  cancelAnimationFrame(raf);
-  step();
-}
-
 /* ---------------------------------------------------------
    FIT HERO WORDS TO WIDTH (long words like EXTRAORDINARIO)
    --------------------------------------------------------- */
@@ -322,22 +316,25 @@ fitHero();
 window.addEventListener('resize', () => { fitHero(); });
 
 /* ---------------------------------------------------------
-   MEDIA SLOTS: quitar los que no tengan archivo
+   HERO LOOP VIDEO (horizontal on desktop, vertical on phones)
    --------------------------------------------------------- */
-function initMedia() {
-  const hero = $('.hero__media');
-  const vid = hero.querySelector('video');
-  const src = vid.querySelector('source');
-  vid.addEventListener('loadeddata', () => hero.classList.add('is-ready'));
-  src.addEventListener('error', () => {
-    // sin video: intentar solo el poster como imagen
-    const img = new Image();
-    img.onload = () => { vid.remove(); hero.style.background = 'url(/media/hero.jpg) center / cover'; hero.classList.add('is-ready'); hero.style.opacity = '.38'; };
-    img.onerror = () => hero.remove();
-    img.src = '/media/hero.jpg';
+function initHeroVideo() {
+  const v = $('#heroVideo');
+  if (!v) return;
+  const set = innerHeight > innerWidth ? 'mobile' : 'desktop';
+  v.poster = `/media/hero/hero-${set}.jpg`;
+  v.src = `/media/hero/hero-${set}.mp4`;
+  v.addEventListener('loadeddata', () => $('.hero__media').classList.add('is-ready'), { once: true });
+  v.addEventListener('error', () => $('.hero__media').classList.add('is-ready'), { once: true }); // poster stays
+  $('.hero').classList.add('has-video');
+  v.play().catch(() => {});
+  // pause when the hero is off screen
+  ScrollTrigger.create({
+    trigger: '.hero', start: 'top bottom', end: 'bottom top',
+    onToggle: (self) => (self.isActive ? v.play().catch(() => {}) : v.pause()),
   });
 }
-initMedia();
+initHeroVideo();
 gsap.to('#galleryTrack', {
   x: () => -Math.max(0, $('#galleryTrack').scrollWidth - innerWidth),
   ease: 'none',
