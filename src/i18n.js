@@ -13,6 +13,13 @@ const es = {
   'nav.arena': 'Arena',
   'nav.locations': 'Dojos',
   'nav.cta': 'Clase Gratis',
+  'nav.events': 'Eventos',
+  'nav.home': 'Inicio',
+  'fab.t': 'Clase Gratis',
+  'ev.eyebrow': 'Eventos y Resultados',
+  'ev.title': 'En vivo desde la arena.',
+  'ev.all': 'Todos los eventos',
+  'p.more': 'Ver programa →',
 
   'hero.eyebrow': 'Escuela de Artes Marciales · 3 Dojos en El Paso',
   'hero.l1': 'Convertimos lo',
@@ -82,12 +89,22 @@ const es = {
   'j.sub': 'Trae a tu hijo. Ven tú. No necesitas experiencia, solo las ganas de empezar.',
   'j.name': 'Nombre del papá o alumno', 'j.phone': 'Teléfono', 'j.program': 'Programa', 'j.loc': 'Dojo más cercano', 'j.age': 'Edad del alumno',
   'j.submit': 'Reservar mi clase gratis',
-  'j.ok': 'Lo recibimos. Nuestro equipo te contactará pronto para agendar tu clase gratis.',
+  'j.ok': 'Lo recibimos. Revisa tu correo, nuestro equipo te contactará pronto para agendar tu clase gratis.',
+  'j.email': 'Correo',
+  'j.campbday': 'Campamento o cumpleaños',
+  'j.legal': 'Solo usaremos tus datos para contactarte sobre tu clase gratis.',
+  'j.back': 'Volver al sitio',
+  'j.errFields': 'Revisa tu nombre, correo y un teléfono de 10 dígitos.',
+  'j.errSend': 'No se pudo enviar. Intenta de nuevo o llámanos a tu dojo más cercano.',
 
   'foot.tag': 'Convertimos lo ordinario en extraordinario.',
 };
 
-const en = {};
+// English strings that only exist in JS (the rest is read from the HTML)
+const en = {
+  'j.errFields': 'Please check your name, email and a 10 digit phone number.',
+  'j.errSend': 'We could not send it. Please try again or call your closest dojo.',
+};
 const listeners = [];
 let current = 'en';
 

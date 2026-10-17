@@ -1,4 +1,4 @@
-# Alchemy Karate Academy · Propuesta Web v0.1
+# Alchemy Karate Academy · Propuesta Web v0.2
 
 Landing premium para Alchemy Karate Academy (El Paso, TX). Reemplaza el sitio actual en Yola (plantilla genérica) por una experiencia cinematográfica que hace sentir al papá que su hijo va a entrar a algo grande.
 
@@ -13,6 +13,22 @@ El lema de la academia es *Turning the ordinary to extraordinary*. Todo el sitio
 5. **Arena.** PRESSURE. FOCUS. GLORY. sobre un tatami en perspectiva (inspirado en su post de IG). Datos reales: Mundial Juvenil WAKO 2026 en Jesolo, Battle of the Champions en el El Paso County Coliseum, campeones panamericanos.
 6. **Testimonios, 3 dojos (East, Far East, Horizon) con llamar y cómo llegar, y formulario de clase gratis** con chips de programa y sede.
 7. **Bilingüe EN / ES** con un toggle. Detecta el idioma del navegador. Clave para el mercado de El Paso.
+8. **Eventos y resultados** justo después del hero: próximo evento con cuenta regresiva o el logro más reciente. Página completa en `/events/` con filtros (Próximos, Resultados, Entrenamientos y campamentos). Se editan desde Google Sheets.
+9. **Clase gratis en panel lateral**: cualquier botón de Free Class abre el formulario desde el lado, sin mover al usuario de donde está. Botón flotante siempre visible. En las páginas de programa o dojo, el formulario ya viene preseleccionado.
+10. **Formulario conectado a Google Sheets** con Apps Script: guarda el lead, manda correo de confirmación a la familia (en su idioma) y aviso al dueño con botones de llamar y WhatsApp. Guía: [`apps-script/README.md`](apps-script/README.md).
+
+## Páginas y SEO
+
+| URL | Contenido |
+|---|---|
+| `/` | Home |
+| `/events/` | Eventos, resultados y entrenamientos |
+| `/programs/kids-karate/`, `/after-school/`, `/kickboxing/`, `/competition-team/`, `/leadership/`, `/camps-and-birthday-parties/` | Una página por programa con beneficios, pasos, FAQ y programas relacionados |
+| `/locations/east/`, `/far-east/`, `/horizon/` | Una página por dojo con mapa, teléfono y dirección (SEO local: "karate near me") |
+
+Cada página tiene su propio title, description, canonical, Open Graph y datos estructurados (SportsOrganization, SportsActivityLocation por dojo, Service, FAQPage, BreadcrumbList y Event para próximos eventos). Hay `sitemap.xml` y `robots.txt`. Nav con menús desplegables, menú móvil y footer con links internos a todo.
+
+El contenido de programas y dojos vive en `src/data/site.js`; `scripts/gen-pages.mjs` genera las páginas automáticamente antes de `dev` y `build`. Para editar un texto, se cambia ahí, no en el HTML generado.
 
 ## Tendencias 2026 que usa
 
@@ -28,7 +44,7 @@ npm run dev      # local
 npm run build    # produce /dist
 ```
 
-Deploy en Vercel: importar el repo, framework "Vite", sin configuración extra. `/#nointro` salta la intro para revisar rápido.
+Deploy en Vercel: importar el repo, framework "Vite". Agregar la variable `VITE_SHEETS_ENDPOINT` (ver `apps-script/README.md`). `/#nointro` salta la intro para revisar rápido.
 
 ## Dónde van las imágenes
 
@@ -38,6 +54,8 @@ Todo va en `public/media/` con nombres fijos. La tabla completa con tamaños est
 - `media/programs/`: `kids-karate`, `after-school`, `kickboxing`, `competition`, `leadership`, `camps` (.jpg).
 - `media/arena/`: `wako-worlds`, `battle-of-the-champions`, `panamerican` (.jpg).
 - `media/gallery/01.jpg` a `10.jpg`: carrusel "Life at the dojo" (aparece solo cuando hay fotos).
+- `media/locations/`: `east`, `far-east`, `horizon` (.jpg), fondo de cada página de dojo.
+- `media/events/`: fotos de eventos; el nombre se pone en la columna `image` del Sheet.
 
 ## Pendientes antes de mostrar al cliente
 
@@ -45,6 +63,9 @@ Todo va en `public/media/` con nombres fijos. La tabla completa con tamaños est
 - [ ] **Fotos/video**: hero con loop de video (kumite o kata en cámara lenta) y fotos por programa. Se pueden generar con IA en el estilo de sus posts.
 - [ ] **Testimonios**: pegar el texto exacto de las reseñas (ahora están parafraseados de su sitio actual) o usar reseñas de Google.
 - [ ] Confirmar edades por programa, horarios y si quieren mostrar precios.
-- [ ] Conectar el formulario (Formspree, Supabase o su CRM). Ahora solo valida y muestra confirmación (`TODO` en `src/main.js`).
+- [ ] Conectar el formulario: crear el Google Sheet y poner `VITE_SHEETS_ENDPOINT` en Vercel (guía en `apps-script/README.md`). Sin eso, el formulario corre en modo demo.
+- [ ] Confirmar el dominio final (`SITE_URL` en `src/data/site.js`, ahora `alchemykarateacademy.com`) y dar de alta el sitemap en Google Search Console.
+- [ ] Fotos de eventos en `public/media/events/` y de dojos en `public/media/locations/`.
+- [ ] Video cinematográfico de la intro (patada que corta la tabla).
 - [ ] Revisar con Eddie el contador de "2,500+ familias y fans" (basado en seguidores de IG).
 - [ ] Siguiente fase opcional: página de horarios por dojo, galería del Battle of the Champions, sección Leadership Program.

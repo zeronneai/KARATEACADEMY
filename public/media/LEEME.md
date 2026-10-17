@@ -16,5 +16,7 @@ Sube los archivos con estos nombres exactos. Si un archivo no existe, su espacio
 | Arena: Battle of the Champions | `media/arena/battle-of-the-champions.jpg` | 1200x900 |
 | Arena: Panamericano | `media/arena/panamerican.jpg` | 1200x900 |
 | Galeria (carrusel) | `media/gallery/01.jpg` a `10.jpg` | 1200x1500 vertical |
+| Pagina de cada dojo | `media/locations/east.jpg`, `far-east.jpg`, `horizon.jpg` | 1920x1080 |
+| Eventos | `media/events/<nombre>.jpg` (el nombre va en la columna image del Sheet) | 1200x900 |
 
 Tip: exporta en JPG calidad 80. Fotos oscuras o con fondo de dojo se integran mejor con el diseno.

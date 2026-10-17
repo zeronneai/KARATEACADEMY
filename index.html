@@ -3,15 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Alchemy Karate Academy · El Paso, TX</title>
-  <meta name="description" content="Karate, kickboxing and leadership training for kids, teens and adults in El Paso, TX. Three dojos: East, Far East and Horizon. Your first class is free." />
+  <title>Karate Classes in El Paso, TX | Alchemy Karate Academy</title>
+  <meta name="description" content="Karate for kids, after-school program, adult kickboxing and a world-level competition team in El Paso, TX. Three dojos: East, Far East and Horizon. Your first class is free." />
+  <link rel="canonical" href="https://alchemykarateacademy.com/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://alchemykarateacademy.com/" />
+  <meta name="twitter:card" content="summary_large_image" />
   <meta name="theme-color" content="#0a0a0b" />
   <meta property="og:title" content="Alchemy Karate Academy · Turning the ordinary into extraordinary" />
   <meta property="og:description" content="Three dojos in El Paso. Karate, kickboxing, after-school care and a competition team on the world stage." />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <link rel="preload" as="image" href="/logo.webp" />
-  <meta property="og:image" content="/logo.webp" />
+  <meta property="og:image" content="https://alchemykarateacademy.com/logo.webp" />
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "SportsOrganization", "@id": "https://alchemykarateacademy.com/#org", "name": "Alchemy Karate Academy", "alternateName": "Team Alchemy", "url": "https://alchemykarateacademy.com/", "logo": "https://alchemykarateacademy.com/logo.webp", "email": "Alchemykarateacademy@live.com", "slogan": "Turning the ordinary into extraordinary", "sport": ["Karate", "Kickboxing"], "sameAs": ["https://www.instagram.com/alchemykarateacademy", "https://www.facebook.com/ALCHEMYKARATEACADEMY"], "location": [{"@type": "SportsActivityLocation", "@id": "https://alchemykarateacademy.com/locations/east/#dojo", "name": "Alchemy Karate Academy · East", "url": "https://alchemykarateacademy.com/locations/east/", "telephone": "+19159215677", "address": {"@type": "PostalAddress", "streetAddress": "1613 N Zaragoza Rd, Ste 104", "addressLocality": "El Paso", "addressRegion": "TX", "postalCode": "79936", "addressCountry": "US"}}, {"@type": "SportsActivityLocation", "@id": "https://alchemykarateacademy.com/locations/far-east/#dojo", "name": "Alchemy Karate Academy · Far East", "url": "https://alchemykarateacademy.com/locations/far-east/", "telephone": "+19155880753", "address": {"@type": "PostalAddress", "streetAddress": "3560 N Zaragoza Rd, Suite 210", "addressLocality": "El Paso", "addressRegion": "TX", "postalCode": "79938", "addressCountry": "US"}}, {"@type": "SportsActivityLocation", "@id": "https://alchemykarateacademy.com/locations/horizon/#dojo", "name": "Alchemy Karate Academy · Horizon", "url": "https://alchemykarateacademy.com/locations/horizon/", "telephone": "+19155004072", "address": {"@type": "PostalAddress", "streetAddress": "13750 Eastlake Blvd, Suite 200", "addressLocality": "El Paso", "addressRegion": "TX", "postalCode": "79928", "addressCountry": "US"}}]}</script>
 </head>
 <body class="is-intro">
 
@@ -60,31 +65,7 @@
     </div>
   </div>
 
-  <div class="grain" aria-hidden="true"></div>
-  <div class="cursor" aria-hidden="true"><span class="cursor__dot"></span><span class="cursor__ring"></span></div>
-
-  <!-- =========================================================
-       NAV
-       ========================================================= -->
-  <header class="nav" id="nav">
-    <a href="#top" class="brand" aria-label="Alchemy Karate Academy home">
-      <img class="brand__logo" id="brandLogo" src="/logo-sm.webp" alt="Alchemy Karate Academy" width="240" height="220" />
-      <span class="shine shine--sm"></span>
-    </a>
-    <nav class="nav__links" aria-label="Main">
-      <a href="#path" data-i18n="nav.path">The Path</a>
-      <a href="#programs" data-i18n="nav.programs">Programs</a>
-      <a href="#arena" data-i18n="nav.arena">Arena</a>
-      <a href="#dojos" data-i18n="nav.locations">Dojos</a>
-    </nav>
-    <div class="nav__right">
-      <div class="lang" role="group" aria-label="Language">
-        <button type="button" data-lang="en" class="is-active">EN</button>
-        <button type="button" data-lang="es">ES</button>
-      </div>
-      <a href="#join" class="btn btn--red btn--sm" data-i18n="nav.cta">Free Class</a>
-    </div>
-  </header>
+  <!-- @include nav -->
 
   <main id="top">
 
@@ -134,7 +115,7 @@
         <div class="hero__bottom">
           <p class="hero__sub" data-i18n="hero.sub">Karate, kickboxing and leadership for kids, teens and adults. We build confidence, discipline and champions, one belt at a time.</p>
           <div class="hero__ctas">
-            <a href="#join" class="btn btn--red magnetic"><span data-i18n="hero.cta1">Claim your free class</span><i class="arrow">→</i></a>
+            <a href="#free-class" data-open-drawer class="btn btn--red magnetic"><span data-i18n="hero.cta1">Claim your free class</span><i class="arrow">→</i></a>
             <a href="#path" class="btn btn--ghost magnetic" data-i18n="hero.cta2">See the path</a>
           </div>
         </div>
@@ -146,6 +127,20 @@
         </ul>
       </div>
 
+    </section>
+
+    <!-- =========================================================
+         EVENTS & RESULTS (lo primero despues del hero; se edita desde Google Sheets)
+         ========================================================= -->
+    <section class="evhome" id="events">
+      <div class="evhome__head">
+        <div>
+          <p class="eyebrow mono" data-i18n="ev.eyebrow">Events &amp; Results</p>
+          <h2 class="h2" data-i18n="ev.title">Live from the arena.</h2>
+        </div>
+        <a href="/events/" class="btn btn--ghost btn--sm"><span data-i18n="ev.all">All events</span><i class="arrow">→</i></a>
+      </div>
+      <div class="evhome__grid" id="eventsHome"></div>
     </section>
 
     <!-- MARQUEE -->
@@ -244,7 +239,7 @@
             <p class="mono belt__label"><span>07</span> · <span data-i18n="b7.belt">Black Belt</span></p>
             <h3 data-i18n="b7.v">Leadership</h3>
             <p data-i18n="b7.t">Not the end. The beginning of leading others down the same path.</p>
-            <a href="#join" class="btn btn--red" data-i18n="b7.cta">Start at white belt</a>
+            <a href="#free-class" data-open-drawer class="btn btn--red" data-i18n="b7.cta">Start at white belt</a>
           </div>
           <div class="belt__band"><i></i></div>
         </article>
@@ -266,7 +261,8 @@
           <p class="card__tag mono" data-i18n="p1.tag">Kids &amp; teens</p>
           <h3 data-i18n="p1.t">Kids Karate</h3>
           <p data-i18n="p1.d">Confidence through small victories. Structured classes that build focus, respect, coordination and the courage to try.</p>
-          <a href="#join" class="card__link" data-i18n="p.try">Try a free class →</a>
+          
+          <a class="card__cover" href="/programs/kids-karate/"><span class="card__more mono" data-i18n="p.more">Explore program →</span></a>
         </article>
         <article class="card card--tall tilt reveal">
           <div class="card__bg" style="--k:'放課後'"></div>
@@ -281,6 +277,7 @@
             <li data-i18n="p2.l4">Homework time</li>
             <li data-i18n="p2.l5">Full dinner</li>
           </ul>
+          <a class="card__cover" href="/programs/after-school/"><span class="card__more mono" data-i18n="p.more">Explore program →</span></a>
         </article>
         <article class="card tilt reveal">
           <div class="card__bg" style="--k:'拳'"></div>
@@ -288,6 +285,7 @@
           <p class="card__tag mono" data-i18n="p3.tag">Adults</p>
           <h3 data-i18n="p3.t">Fitness Kickboxing</h3>
           <p data-i18n="p3.d">Burn calories, build strength and train like a fighter.</p>
+          <a class="card__cover" href="/programs/kickboxing/"><span class="card__more mono" data-i18n="p.more">Explore program →</span></a>
         </article>
         <article class="card card--red tilt reveal">
           <div class="card__bg" style="--k:'勝'"></div>
@@ -295,6 +293,7 @@
           <p class="card__tag mono" data-i18n="p4.tag">Team Alchemy</p>
           <h3 data-i18n="p4.t">Competition Team</h3>
           <p data-i18n="p4.d">From local tournaments to the WAKO World Championships with Team USA.</p>
+          <a class="card__cover" href="/programs/competition-team/"><span class="card__more mono" data-i18n="p.more">Explore program →</span></a>
         </article>
         <article class="card card--gold tilt reveal">
           <div class="card__bg" style="--k:'導'"></div>
@@ -302,6 +301,7 @@
           <p class="card__tag mono" data-i18n="p5.tag">Mentorship</p>
           <h3 data-i18n="p5.t">Leadership Program</h3>
           <p data-i18n="p5.d">Seminars and mentorship that turn students into leaders on and off the mat.</p>
+          <a class="card__cover" href="/programs/leadership/"><span class="card__more mono" data-i18n="p.more">Explore program →</span></a>
         </article>
         <article class="card tilt reveal">
           <div class="card__bg" style="--k:'祭'"></div>
@@ -309,6 +309,7 @@
           <p class="card__tag mono" data-i18n="p6.tag">All year</p>
           <h3 data-i18n="p6.t">Camps &amp; Birthday Parties</h3>
           <p data-i18n="p6.d">Spring break, summer, sparring and gymnastics camps. Birthday parties with a kiai.</p>
+          <a class="card__cover" href="/programs/camps-and-birthday-parties/"><span class="card__more mono" data-i18n="p.more">Explore program →</span></a>
         </article>
       </div>
     </section>
@@ -412,7 +413,7 @@
       <div class="dojos__list">
         <article class="dojo reveal">
           <span class="dojo__n mono">01</span>
-          <h3>East</h3>
+          <h3><a href="/locations/east/">East</a></h3>
           <p>1613 N Zaragoza Rd, Ste 104<br />El Paso, TX 79936</p>
           <div class="dojo__actions">
             <a class="btn btn--ghost btn--sm" href="tel:+19159215677"><span data-i18n="d.call">Call</span> (915) 921-5677</a>
@@ -421,7 +422,7 @@
         </article>
         <article class="dojo reveal">
           <span class="dojo__n mono">02</span>
-          <h3>Far East</h3>
+          <h3><a href="/locations/far-east/">Far East</a></h3>
           <p>3560 N Zaragoza Rd, Suite 210<br />El Paso, TX 79938</p>
           <div class="dojo__actions">
             <a class="btn btn--ghost btn--sm" href="tel:+19155880753"><span data-i18n="d.call">Call</span> (915) 588-0753</a>
@@ -430,7 +431,7 @@
         </article>
         <article class="dojo reveal">
           <span class="dojo__n mono">03</span>
-          <h3>Horizon</h3>
+          <h3><a href="/locations/horizon/">Horizon</a></h3>
           <p>13750 Eastlake Blvd, Suite 200<br />El Paso, TX 79928</p>
           <div class="dojo__actions">
             <a class="btn btn--ghost btn--sm" href="tel:+19155004072"><span data-i18n="d.call">Call</span> (915) 500-4072</a>
@@ -443,55 +444,17 @@
     <!-- =========================================================
          JOIN
          ========================================================= -->
-    <section class="join" id="join">
-      <div class="join__left">
-        <p class="eyebrow mono" data-i18n="j.eyebrow">Free trial class</p>
-        <h2 class="join__title"><span data-i18n="j.t1">Your first class</span><br /><span class="gold" data-i18n="j.t2">is on us.</span></h2>
-        <p class="join__sub" data-i18n="j.sub">Bring your kid. Bring yourself. No experience needed, just the will to start.</p>
-        <div class="join__oss" aria-hidden="true">押忍</div>
-      </div>
-
-      <form class="form" id="joinForm" novalidate>
-        <label class="field"><span data-i18n="j.name">Parent or student name</span><input name="name" required autocomplete="name" /></label>
-        <label class="field"><span data-i18n="j.phone">Phone</span><input name="phone" type="tel" required autocomplete="tel" /></label>
-        <div class="field">
-          <span data-i18n="j.program">Program</span>
-          <div class="chips" data-name="program">
-            <button type="button" class="chip is-on" data-v="Kids Karate" data-i18n="p1.t">Kids Karate</button>
-            <button type="button" class="chip" data-v="After-School" data-i18n="p2.t">After-School Care</button>
-            <button type="button" class="chip" data-v="Kickboxing" data-i18n="p3.t">Fitness Kickboxing</button>
-          </div>
-        </div>
-        <div class="field">
-          <span data-i18n="j.loc">Closest dojo</span>
-          <div class="chips" data-name="location">
-            <button type="button" class="chip is-on" data-v="East">East</button>
-            <button type="button" class="chip" data-v="Far East">Far East</button>
-            <button type="button" class="chip" data-v="Horizon">Horizon</button>
-          </div>
-        </div>
-        <label class="field"><span data-i18n="j.age">Student age</span><input name="age" inputmode="numeric" /></label>
-        <button class="btn btn--red btn--block magnetic" type="submit"><span data-i18n="j.submit">Book my free class</span><i class="arrow">→</i></button>
-        <p class="form__ok" id="formOk" hidden><b>OSS!</b> <span data-i18n="j.ok">We received it. Our team will reach out soon to book your free class.</span></p>
-      </form>
+    <section class="cta-band" id="join">
+      <div class="cta-band__k" aria-hidden="true">押忍</div>
+      <p class="eyebrow mono" data-i18n="j.eyebrow">Free trial class</p>
+      <h2 class="cta-band__title"><span data-i18n="j.t1">Your first class</span><br /><span class="gold" data-i18n="j.t2">is on us.</span></h2>
+      <p class="join__sub" data-i18n="j.sub">Bring your kid. Bring yourself. No experience needed, just the will to start.</p>
+      <a href="#free-class" data-open-drawer class="btn btn--red magnetic"><span data-i18n="j.submit">Book my free class</span><i class="arrow">→</i></a>
     </section>
   </main>
 
-  <footer class="footer">
-    <div class="footer__brand">
-      <div class="footer__word" aria-hidden="true">ALCHEMY</div>
-      <img class="footer__logo" src="/logo.webp" alt="Alchemy Karate Academy" loading="lazy" width="923" height="845" />
-    </div>
-    <div class="footer__row">
-      <p data-i18n="foot.tag">Turning the ordinary into extraordinary.</p>
-      <div class="footer__links">
-        <a href="https://www.instagram.com/alchemykarateacademy" target="_blank" rel="noopener">Instagram</a>
-        <a href="https://www.facebook.com/ALCHEMYKARATEACADEMY" target="_blank" rel="noopener">Facebook</a>
-        <a href="mailto:Alchemykarateacademy@live.com">Email</a>
-      </div>
-      <p class="mono footer__small">© <span id="year"></span> Alchemy Karate Academy · El Paso, TX</p>
-    </div>
-  </footer>
+  <!-- @include footer -->
+  <!-- @include drawer -->
 
   <script type="module" src="/src/main.js"></script>
 </body>

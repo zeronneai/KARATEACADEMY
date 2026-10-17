@@ -1,45 +1,9 @@
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import Lenis from 'lenis';
-import { initI18n, onLangChange, t } from './i18n.js';
-import '@fontsource/big-shoulders-display/600';
-import '@fontsource/big-shoulders-display/800';
-import '@fontsource/big-shoulders-display/900';
-import '@fontsource/inter-tight/400';
-import '@fontsource/inter-tight/500';
-import '@fontsource/inter-tight/600';
-import '@fontsource/ibm-plex-mono/400';
-import '@fontsource/ibm-plex-mono/500';
-import '@fontsource/noto-serif-jp/900';
-import './style.css';
+// Home page: intro (board break + logo), hero chop, belts path, arena.
+import { gsap, ScrollTrigger, lenis, $, $$, reduceMotion, onLangChange, t, initCore } from './core.js';
+import { renderHome } from './events.js';
 
-gsap.registerPlugin(ScrollTrigger);
-
-const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-const $ = (s, r = document) => r.querySelector(s);
-const $$ = (s, r = document) => [...r.querySelectorAll(s)];
-
-initI18n();
-$('#year').textContent = new Date().getFullYear();
-
-/* ---------------------------------------------------------
-   SMOOTH SCROLL
-   --------------------------------------------------------- */
-const lenis = new Lenis({ lerp: 0.09, smoothWheel: true });
-lenis.on('scroll', ScrollTrigger.update);
-gsap.ticker.add((time) => lenis.raf(time * 1000));
-gsap.ticker.lagSmoothing(0);
-lenis.stop();
-
-$$('a[href^="#"]').forEach((a) => {
-  a.addEventListener('click', (e) => {
-    const id = a.getAttribute('href');
-    const target = id === '#top' ? 0 : $(id);
-    if (target === null) return;
-    e.preventDefault();
-    lenis.scrollTo(target, { offset: 0, duration: 1.6 });
-  });
-});
+initCore();
+renderHome();
 
 /* ---------------------------------------------------------
    AUDIO (synthesized, no files; only starts after a gesture)
@@ -372,18 +336,6 @@ function initMedia() {
     img.onerror = () => hero.remove();
     img.src = '/media/hero.jpg';
   });
-
-  $$('img.slot').forEach((img) => {
-    const ok = () => {
-      img.closest('.card')?.classList.add('has-img');
-      const g = img.closest('#gallery');
-      if (g && g.hidden) { g.hidden = false; ScrollTrigger.refresh(); }
-    };
-    const bad = () => { img.remove(); };
-    if (img.complete) { img.naturalWidth ? ok() : bad(); }
-    img.addEventListener('load', ok);
-    img.addEventListener('error', bad);
-  });
 }
 initMedia();
 gsap.to('#galleryTrack', {
@@ -450,14 +402,6 @@ gsap.to('#sigil', {
 gsap.to('.hero__inner', {
   yPercent: 18, opacity: 0.2,
   scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true },
-});
-
-/* ---------------------------------------------------------
-   NAV STATE
-   --------------------------------------------------------- */
-ScrollTrigger.create({
-  start: 80, end: 'max',
-  onToggle: (self) => $('#nav').classList.toggle('is-solid', self.isActive),
 });
 
 /* ---------------------------------------------------------
@@ -535,42 +479,6 @@ belts.forEach((b) => {
 });
 
 /* ---------------------------------------------------------
-   REVEALS
-   --------------------------------------------------------- */
-ScrollTrigger.batch('.reveal', {
-  start: 'top 88%',
-  onEnter: (els) => gsap.fromTo(els, { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 1.1, stagger: 0.08, ease: 'expo.out', overwrite: true }),
-});
-gsap.set('.reveal', { opacity: 0 });
-
-$$('.section-head').forEach((h) => {
-  gsap.from(h.children, {
-    y: 40, opacity: 0, duration: 1.1, stagger: 0.08, ease: 'expo.out',
-    scrollTrigger: { trigger: h, start: 'top 85%' },
-  });
-});
-
-/* ---------------------------------------------------------
-   CARDS: spotlight + tilt
-   --------------------------------------------------------- */
-if (matchMedia('(hover: hover)').matches) {
-  $$('.tilt').forEach((card) => {
-    const rx = gsap.quickTo(card, 'rotationX', { duration: 0.6, ease: 'power3' });
-    const ry = gsap.quickTo(card, 'rotationY', { duration: 0.6, ease: 'power3' });
-    gsap.set(card, { transformPerspective: 900 });
-    card.addEventListener('pointermove', (e) => {
-      const r = card.getBoundingClientRect();
-      const px = (e.clientX - r.left) / r.width;
-      const py = (e.clientY - r.top) / r.height;
-      card.style.setProperty('--mx', `${px * 100}%`);
-      card.style.setProperty('--my', `${py * 100}%`);
-      rx((0.5 - py) * 7); ry((px - 0.5) * 7);
-    });
-    card.addEventListener('pointerleave', () => { rx(0); ry(0); });
-  });
-}
-
-/* ---------------------------------------------------------
    ARENA: pressure / focus / glory
    --------------------------------------------------------- */
 const aws = $$('.aw');
@@ -598,75 +506,6 @@ $$('.count').forEach((el) => {
   });
 });
 
-/* footer logo */
-gsap.from('.footer__logo', {
-  scale: 0.6, opacity: 0, rotation: -8, ease: 'back.out(1.6)', duration: 1.2,
-  scrollTrigger: { trigger: '.footer', start: 'top 80%' },
-});
-
-/* footer word fill */
-gsap.to('.footer__word', {
-  backgroundSize: '100% 100%', ease: 'none',
-  scrollTrigger: { trigger: '.footer', start: 'top 90%', end: 'bottom bottom', scrub: true },
-});
-
-/* ---------------------------------------------------------
-   MAGNETIC BUTTONS + CURSOR
-   --------------------------------------------------------- */
-if (matchMedia('(hover: hover) and (pointer: fine)').matches) {
-  $$('.magnetic').forEach((btn) => {
-    const xTo = gsap.quickTo(btn, 'x', { duration: 0.5, ease: 'power3' });
-    const yTo = gsap.quickTo(btn, 'y', { duration: 0.5, ease: 'power3' });
-    btn.addEventListener('pointermove', (e) => {
-      const r = btn.getBoundingClientRect();
-      xTo((e.clientX - r.left - r.width / 2) * 0.25);
-      yTo((e.clientY - r.top - r.height / 2) * 0.35);
-    });
-    btn.addEventListener('pointerleave', () => { xTo(0); yTo(0); });
-  });
-
-  const cursor = $('.cursor');
-  const dot = $('.cursor__dot');
-  const ring = $('.cursor__ring');
-  const dx = gsap.quickTo(dot, 'x', { duration: 0.08 }); const dy = gsap.quickTo(dot, 'y', { duration: 0.08 });
-  const rxq = gsap.quickTo(ring, 'x', { duration: 0.45, ease: 'power3' }); const ryq = gsap.quickTo(ring, 'y', { duration: 0.45, ease: 'power3' });
-  window.addEventListener('pointermove', (e) => { dx(e.clientX); dy(e.clientY); rxq(e.clientX); ryq(e.clientY); });
-  document.addEventListener('pointerover', (e) => {
-    cursor.classList.toggle('is-hover', !!e.target.closest('a, button, .card, input'));
-  });
-}
-
-/* ---------------------------------------------------------
-   FORM
-   --------------------------------------------------------- */
-$$('.chips').forEach((group) => {
-  group.addEventListener('click', (e) => {
-    const chip = e.target.closest('.chip'); if (!chip) return;
-    $$('.chip', group).forEach((c) => c.classList.toggle('is-on', c === chip));
-  });
-});
-$('#joinForm').addEventListener('submit', (e) => {
-  e.preventDefault();
-  const f = e.currentTarget;
-  const name = f.name.value.trim();
-  const phone = f.phone.value.trim();
-  f.name.classList.toggle('is-bad', !name);
-  f.phone.classList.toggle('is-bad', phone.replace(/\D/g, '').length < 10);
-  if (!name || phone.replace(/\D/g, '').length < 10) return;
-
-  const data = {
-    name, phone, age: f.age.value.trim(),
-    program: $('.chips[data-name="program"] .is-on').dataset.v,
-    location: $('.chips[data-name="location"] .is-on').dataset.v,
-  };
-  // TODO: connect to the academy's CRM / Formspree / Supabase endpoint.
-  console.info('[free-class lead]', data);
-  const ok = $('#formOk');
-  ok.hidden = false;
-  gsap.from(ok, { y: 20, opacity: 0, duration: 0.8, ease: 'expo.out' });
-  f.querySelector('button[type=submit]').disabled = true;
-});
-
 /* ---------------------------------------------------------
    LANGUAGE CHANGES
    --------------------------------------------------------- */
@@ -688,6 +527,6 @@ if (reduceMotion || seen || location.hash === '#nointro') {
   lenis.start();
   heroIn();
 } else {
+  lenis.stop();
   runIntro();
 }
-window.addEventListener('load', () => ScrollTrigger.refresh());

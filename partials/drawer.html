@@ -1,0 +1,59 @@
+<a href="#free-class" class="fab" id="fab" data-open-drawer aria-label="Book a free class">
+  <span class="fab__ring" aria-hidden="true"></span>
+  <span class="fab__k" aria-hidden="true">押忍</span>
+  <span class="fab__t" data-i18n="fab.t">Free Class</span>
+</a>
+
+<div class="drawer" id="drawer" aria-hidden="true">
+  <div class="drawer__scrim" data-close-drawer></div>
+  <aside class="drawer__panel" data-lenis-prevent role="dialog" aria-modal="true" aria-labelledby="drawerTitle" tabindex="-1">
+    <div class="drawer__top">
+      <img src="/logo-sm.webp" alt="" width="240" height="220" class="drawer__logo" />
+      <button class="drawer__close" type="button" data-close-drawer aria-label="Close"><span></span><span></span></button>
+    </div>
+
+    <div class="drawer__view" id="drawerForm">
+      <p class="eyebrow mono" data-i18n="j.eyebrow">Free trial class</p>
+      <h2 class="drawer__title" id="drawerTitle"><span data-i18n="j.t1">Your first class</span> <span class="gold" data-i18n="j.t2">is on us.</span></h2>
+      <p class="drawer__sub" data-i18n="j.sub">Bring your kid. Bring yourself. No experience needed, just the will to start.</p>
+
+      <form class="form" id="joinForm" novalidate>
+        <label class="field"><span data-i18n="j.name">Parent or student name</span><input name="name" required autocomplete="name" /></label>
+        <div class="field-row">
+          <label class="field"><span data-i18n="j.email">Email</span><input name="email" type="email" required autocomplete="email" inputmode="email" /></label>
+          <label class="field"><span data-i18n="j.phone">Phone</span><input name="phone" type="tel" required autocomplete="tel" /></label>
+        </div>
+        <div class="field">
+          <span data-i18n="j.program">Program</span>
+          <div class="chips" data-name="program">
+            <button type="button" class="chip is-on" data-v="Kids Karate" data-i18n="p1.t">Kids Karate</button>
+            <button type="button" class="chip" data-v="After-School" data-i18n="p2.t">After-School Care</button>
+            <button type="button" class="chip" data-v="Kickboxing" data-i18n="p3.t">Fitness Kickboxing</button>
+            <button type="button" class="chip" data-v="Camps / Birthday" data-i18n="j.campbday">Camp or birthday</button>
+          </div>
+        </div>
+        <div class="field">
+          <span data-i18n="j.loc">Closest dojo</span>
+          <div class="chips" data-name="location">
+            <button type="button" class="chip is-on" data-v="East">East</button>
+            <button type="button" class="chip" data-v="Far East">Far East</button>
+            <button type="button" class="chip" data-v="Horizon">Horizon</button>
+          </div>
+        </div>
+        <label class="field"><span data-i18n="j.age">Student age</span><input name="age" inputmode="numeric" maxlength="3" /></label>
+        <label class="hp" aria-hidden="true">Company<input name="company" tabindex="-1" autocomplete="off" /></label>
+        <p class="form__err" id="formErr" hidden></p>
+        <button class="btn btn--red btn--block" type="submit" id="formSubmit"><span data-i18n="j.submit">Book my free class</span><i class="arrow">→</i></button>
+        <p class="form__legal" data-i18n="j.legal">We will only use your info to contact you about your free class.</p>
+      </form>
+    </div>
+
+    <div class="drawer__view drawer__done" id="drawerDone" hidden>
+      <div class="done__k" aria-hidden="true">押忍</div>
+      <h2 class="drawer__title"><span class="gold">OSS!</span></h2>
+      <p class="drawer__sub" data-i18n="j.ok">We received it. Check your email, our team will reach out soon to book your free class.</p>
+      <div class="done__card" id="doneSummary"></div>
+      <button type="button" class="btn btn--ghost btn--block" data-close-drawer data-i18n="j.back">Back to the site</button>
+    </div>
+  </aside>
+</div>
