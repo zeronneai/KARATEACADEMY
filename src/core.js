@@ -11,8 +11,7 @@ import '@fontsource/big-shoulders-display/900';
 import '@fontsource/inter-tight/400';
 import '@fontsource/inter-tight/500';
 import '@fontsource/inter-tight/600';
-import '@fontsource/ibm-plex-mono/400';
-import '@fontsource/ibm-plex-mono/500';
+import '@fontsource/barlow-condensed/600';
 import '@fontsource/noto-serif-jp/900';
 import './style.css';
 

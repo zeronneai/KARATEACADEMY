@@ -20,7 +20,7 @@
 
   --f-display: "Big Shoulders Display", Impact, sans-serif;
   --f-body: "Inter Tight", system-ui, sans-serif;
-  --f-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --f-mono: "Barlow Condensed", "Arial Narrow", sans-serif;
   --f-jp: "Noto Serif JP", serif;
 
   --gutter: clamp(16px, 4vw, 56px);
@@ -50,7 +50,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 img { max-width: 100%; display: block; }
 ::selection { background: var(--red); color: #fff; }
 
-.mono { font-family: var(--f-mono); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; }
+.mono { font-family: var(--f-mono); font-weight: 600; font-size: 14px; letter-spacing: 0.1em; text-transform: uppercase; }
 .gold {
   background: linear-gradient(100deg, #a4741c 0%, var(--gold-2) 30%, var(--gold) 50%, #fff3c9 62%, var(--gold) 78%, #8f6316 100%);
   background-size: 220% 100%;
@@ -79,13 +79,13 @@ img { max-width: 100%; display: block; }
   --h: 54px;
   display: inline-flex; align-items: center; justify-content: center; gap: 12px;
   height: var(--h); padding: 0 26px;
-  font-family: var(--f-mono); font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase;
+  font-family: var(--f-mono); font-weight: 600; font-size: 16px; letter-spacing: 0.08em; text-transform: uppercase;
   border-radius: 999px;
   position: relative; overflow: hidden; isolation: isolate;
   transition: transform .4s var(--ease), background .3s, color .3s, border-color .3s;
   white-space: nowrap;
 }
-.btn--sm { --h: 40px; padding: 0 18px; font-size: 11px; }
+.btn--sm { --h: 40px; padding: 0 18px; font-size: 14px; }
 .btn--block { width: 100%; }
 .btn--red { background: var(--red); color: #fff; box-shadow: 0 10px 40px -10px rgba(227, 18, 27, .7); }
 .btn--red::after {
