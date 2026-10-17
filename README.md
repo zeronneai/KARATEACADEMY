@@ -67,7 +67,17 @@ Todo va en `public/media/` con nombres fijos. La tabla completa con tamaños est
 - [ ] Confirmar edades por programa, horarios y si quieren mostrar precios.
 - [ ] Conectar el formulario: crear el Google Sheet y poner `VITE_SHEETS_ENDPOINT` en Vercel (guía en `apps-script/README.md`). Sin eso, el formulario corre en modo demo.
 - [ ] Confirmar el dominio final (`SITE_URL` en `src/data/site.js`, ahora `alchemykarateacademy.com`) y dar de alta el sitemap en Google Search Console.
-- [ ] Fotos de eventos en `public/media/events/` y de dojos en `public/media/locations/`.
+- [ ] Fotos de dojos en `public/media/locations/` (eventos ya tienen flyers: Battle, WAKO, Victor Montanez, Summer Camp).
 - [x] Video de la intro (patada que rompe la tabla) y loop del hero.
 - [ ] Revisar con Eddie el contador de "2,500+ familias y fans" (basado en seguidores de IG).
 - [ ] Siguiente fase opcional: página de horarios por dojo, galería del Battle of the Champions, sección Leadership Program.
+
+## Rendimiento
+
+- Intro: carga primero un cuadro sí y uno no (48), se puede jugar desde ahí y el resto llega en segundo plano. El video del hero empieza a bajar hasta que terminan los cuadros.
+- Fuentes solo en latín (incluye acentos y ñ). Los kanji usan una fuente propia de 10 KB con solo los 45 caracteres del sitio (`src/fonts/alchemy-kanji-900.woff2`).
+- `vercel.json` con caché larga para `/assets` y `/media`.
+- En celular se apaga el grano animado de fondo.
+
+### Fuente kanji
+Si se agregan kanji nuevos al texto, hay que regenerar `src/fonts/alchemy-kanji-900.woff2` (subset de Noto Serif JP 900 con fontTools). Mientras tanto se ven con la fuente japonesa del sistema.

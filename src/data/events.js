@@ -23,10 +23,10 @@ export const fallbackEvents = [
     image: '/media/events/wako-worlds-2026.jpg',
   },
   {
-    date: '2026-07-15', dateLabel: { en: '2026', es: '2026' },
-    category: 'achievement',
+    date: '2026-08-16', dateLabel: { en: 'August 12 to 16, 2026', es: '12 al 16 de agosto, 2026' },
+    category: 'achievement', featured: true,
     title: { en: 'Victor Montanez, Panamerican Champion', es: 'Victor Montanez, Campeón Panamericano' },
-    location: 'WAKO Panamerican & South American Championships',
+    location: 'Olmué, Chile · WAKO Panamerican & South American Championships',
     desc: { en: 'Gold in -79kg Kick Light and Light Contact.', es: 'Oro en -79kg Kick Light y Light Contact.' },
     image: '/media/events/victor-montanez.jpg',
   },
@@ -35,7 +35,7 @@ export const fallbackEvents = [
     category: 'camp',
     title: { en: 'Karate Summer Camp', es: 'Campamento de Verano' },
     location: 'All locations',
-    desc: { en: 'Gymnastics, sparring and X-Zone camp days.', es: 'Días de gimnasia, sparring y X-Zone.' },
+    desc: { en: 'Gymnastics (June 8), sparring (June 10) and X-Zone trampoline park (June 12).', es: 'Gimnasia (8 de junio), sparring (10 de junio) y X-Zone trampoline park (12 de junio).' },
     image: '/media/events/summer-camp-2026.jpg',
   },
   {

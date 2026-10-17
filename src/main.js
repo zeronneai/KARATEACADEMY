@@ -149,21 +149,37 @@ function runIntro() {
     lastDrawn = i;
   }
 
-  // preload every frame, showing a real loading percentage
+  // Load in passes so it is playable early: key frames (every 2nd) first, the rest after.
+  // The percentage tracks the key frames; missing frames fall back to the nearest loaded one.
   const pct = $('#introPct');
-  const onLoad = () => {
-    loaded++;
-    pct.textContent = Math.round((loaded / FRAMES) * 100);
-    if (lastDrawn < 0) draw(0);
-    if (loaded === FRAMES) enable();
+  const order = [];
+  const seen = new Set();
+  [8, 4, 2, 1].forEach((step) => { for (let i = 0; i < FRAMES; i += step) if (!seen.has(i)) { seen.add(i); order.push(i); } });
+  if (!seen.has(FRAMES - 1)) order.splice(1, 0, FRAMES - 1);
+  const KEY = order.filter((i) => i % 2 === 0 || i === FRAMES - 1).length;
+  let keyLoaded = 0; let next = 0; let inflight = 0;
+  const pump = () => {
+    while (inflight < 6 && next < order.length) {
+      const i = order[next++];
+      const im = new Image();
+      im.decoding = 'async';
+      im.onload = im.onerror = () => {
+        inflight--; loaded++;
+        if (i % 2 === 0 || i === FRAMES - 1) {
+          keyLoaded++;
+          pct.textContent = Math.min(100, Math.round((keyLoaded / KEY) * 100));
+          if (keyLoaded === KEY) enable();
+        }
+        if (lastDrawn < 0 && imgs[0] && okImg(imgs[0])) draw(0);
+        if (loaded === FRAMES) window.dispatchEvent(new Event('aka:frames-loaded'));
+        pump();
+      };
+      im.src = src(i);
+      imgs[i] = im;
+      inflight++;
+    }
   };
-  for (let i = 0; i < FRAMES; i++) {
-    const im = new Image();
-    im.decoding = 'async';
-    im.onload = onLoad; im.onerror = onLoad;
-    im.src = src(i);
-    imgs[i] = im;
-  }
+  pump();
   const failsafe = setTimeout(enable, 10000); // slow connection: start anyway with what loaded
 
   gsap.from('#introUi', { y: 20, opacity: 0, duration: 1, ease: 'power3.out', delay: 0.15 });
@@ -246,6 +262,7 @@ function runIntro() {
   function end() {
     if (done) return;
     cleanup();
+    startHeroVideo();
     draw(FRAMES - 1);
     gsap.timeline().add(logoSequence(), 0.25);
   }
@@ -292,6 +309,7 @@ function runIntro() {
   $('#skipBtn').addEventListener('click', () => {
     if (done) return;
     cleanup();
+    startHeroVideo();
     gsap.to(intro, { opacity: 0, duration: 0.5, onComplete: finish });
     heroIn();
     gsap.fromTo('.brand', { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.8, ease: 'back.out(2)', delay: 0.2 });
@@ -334,7 +352,9 @@ function initHeroVideo() {
     onToggle: (self) => (self.isActive ? v.play().catch(() => {}) : v.pause()),
   });
 }
-initHeroVideo();
+const startHeroVideo = () => { if (!startHeroVideo.done) { startHeroVideo.done = true; initHeroVideo(); } };
+window.addEventListener('aka:frames-loaded', startHeroVideo, { once: true });
+setTimeout(startHeroVideo, 12000); // safety net on slow connections
 gsap.to('#galleryTrack', {
   x: () => -Math.max(0, $('#galleryTrack').scrollWidth - innerWidth),
   ease: 'none',
@@ -383,7 +403,8 @@ function heroIn(opts = {}) {
   if (!reduceMotion) {
     const shapes = $$('#sigil > *');
     shapes.forEach((s) => {
-      const len = s.getTotalLength ? s.getTotalLength() : 0;
+      let len = 0;
+      try { len = s.getTotalLength ? s.getTotalLength() : 0; } catch (e) { len = 0; }
       if (len) { s.style.strokeDasharray = len; s.style.strokeDashoffset = len; }
     });
     gsap.to(shapes, { strokeDashoffset: 0, duration: 2.6, stagger: 0.06, ease: 'power2.inOut', delay: 0.2 });
@@ -498,7 +519,7 @@ $$('.count').forEach((el) => {
     trigger: el, start: 'top 90%', once: true,
     onEnter: () => gsap.to(o, {
       v: to, duration: 2, ease: 'power3.out',
-      onUpdate: () => { el.textContent = Math.round(o.v).toLocaleString('en-US'); },
+      onUpdate: () => { el.textContent = el.dataset.dec ? o.v.toFixed(+el.dataset.dec) : Math.round(o.v).toLocaleString('en-US'); },
     }),
   });
 });
@@ -522,6 +543,7 @@ if (reduceMotion || seen || location.hash === '#nointro') {
   $('#intro').remove();
   document.body.classList.remove('is-intro');
   lenis.start();
+  startHeroVideo();
   heroIn();
 } else {
   lenis.stop();
