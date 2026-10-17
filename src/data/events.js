@@ -43,7 +43,7 @@ export const fallbackEvents = [
     category: 'graduation',
     title: { en: 'Belt Graduation Day', es: 'Día de Graduación de Cintas' },
     location: 'Hanks High School, 2001 Lee Trevino Dr',
-    desc: { en: 'All students, all belts, all locations. A day to celebrate the hard work.', es: 'Todos los alumnos, todas las cintas, todas las sedes. Un día para celebrar el esfuerzo.' },
+    desc: { en: 'All students, all belts, all locations. Arrive by 9:30 AM in full uniform.', es: 'Todos los alumnos, todas las cintas, todas las sedes. Llegar a las 9:30 AM con uniforme completo.' },
     image: '/media/events/graduation-2026-04.jpg',
   },
   {
@@ -51,7 +51,7 @@ export const fallbackEvents = [
     category: 'camp',
     title: { en: 'Spring Break Camps', es: 'Campamentos de Spring Break' },
     location: 'All locations',
-    desc: { en: 'Gymnastics camp, sparring camp and a fun day at X-Zone.', es: 'Campamento de gimnasia, de sparring y un día de diversión en X-Zone.' },
+    desc: { en: 'Gymnastics camp (tumbling, flips and tricks), sparring camp (drills and techniques) and a fun day at X-Zone with karate school games.', es: 'Campamento de gimnasia (marometas y trucos), de sparring (ejercicios y técnicas) y un día de diversión en X-Zone con juegos del dojo.' },
     image: '/media/events/spring-break-2026.jpg',
   },
   {
@@ -59,16 +59,8 @@ export const fallbackEvents = [
     category: 'seminar',
     title: { en: 'Leadership Seminar', es: 'Seminario de Liderazgo' },
     location: 'East location',
-    desc: { en: 'Full leadership uniform, swords required, and a surprise for everyone.', es: 'Uniforme completo de liderazgo, espadas obligatorias y una sorpresa para todos.' },
+    desc: { en: 'Full leadership uniform, bring your swords, a surprise for everyone and some splashing fun in the sun.', es: 'Uniforme completo de liderazgo, trae tus espadas, una sorpresa para todos y diversión con agua bajo el sol.' },
     image: '/media/events/leadership-seminar.jpg',
-  },
-  {
-    date: '2024-09-01', dateLabel: { en: '2024', es: '2024' },
-    category: 'achievement',
-    title: { en: 'Team USA breaks records at Junior Worlds', es: 'Team USA rompe récords en el Mundial Junior' },
-    location: 'WAKO Junior World Kickboxing Championships',
-    desc: { en: 'Alchemy athletes were part of the Team USA squad that set records in 2024.', es: 'Atletas de Alchemy formaron parte del equipo de Team USA que rompió récords en 2024.' },
-    image: '/media/events/junior-worlds-2024.jpg',
   },
   {
     date: '2026-10-01', category: 'motivation',
