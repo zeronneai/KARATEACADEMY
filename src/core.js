@@ -3,6 +3,7 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
+import { inject as injectAnalytics } from '@vercel/analytics';
 import { initI18n, onLangChange, t, lang } from './i18n.js';
 import { SHEETS_ENDPOINT } from './config.js';
 import '@fontsource/big-shoulders-display/latin-600';
@@ -22,6 +23,9 @@ export const $ = (s, r = document) => r.querySelector(s);
 export const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 
 initI18n();
+
+// Vercel Web Analytics (page views on every page; only reports on Vercel deployments)
+injectAnalytics();
 
 /* ---------------- smooth scroll ---------------- */
 export const lenis = new Lenis({ lerp: 0.09, smoothWheel: true });
